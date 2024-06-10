@@ -11,9 +11,9 @@ This project is a simple URL shortener service, similar to Bit.ly or TinyURL. It
 
 ## Technologies
 
-- **Backend:** Go
+- **Backend:** Go, Gin
 - **Database:** PostgreSQL (with GORM)
-- **Frontend:** HTMX, SCSS.modules
+- **Frontend:** Next.js, SCSS.modules
 
 ## Getting Started
 
