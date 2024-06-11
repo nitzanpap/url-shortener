@@ -1,3 +1,12 @@
 {
-  "cSpell.words": ["fatih", "gonic", "joho"]
+  "cSpell.words": ["fatih", "gonic", "joho"],
+  "makefile.makefilePath": "./server/Makefile",
+  "makefile.configurations": [
+    {
+      "name": "Default",
+      "makeDirectory": "./server"
+    }
+  ],
+  "makefile.makeDirectory": "",
+  "makefile.makePath": "/usr/bin/make"
 }
