@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
+	"github.com/nitzanpap/url-shortener/configs"
+	"github.com/nitzanpap/url-shortener/pkg/colors"
 )
 
 var db = make(map[string]string)
@@ -87,18 +87,13 @@ func setupRouter() *gin.Engine {
 }
 
 func main() {
-	// Find .env file
-	err := godotenv.Load(".env")
+	config, err := configs.LoadConfig()
 	if err != nil {
-		log.Fatalf("Error loading .env file: %s", err)
+		log.Fatalf(colors.Error("Error loading configuration: %v"), err)
 	}
 
-	// Getting and using a value from .env
-	greeting := os.Getenv("GREETING")
-
-	fmt.Println(greeting)
-
 	r := setupRouter()
-	// Listen and Server in 0.0.0.0:8080
-	r.Run(":8080")
+	fmt.Printf(colors.Success("Server running on: http://localhost:%s\n"), config.Port)
+	// Listen and Server in 0.0.0.0:${port}
+	r.Run(":" + config.Port)
 }
