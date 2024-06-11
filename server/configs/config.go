@@ -5,6 +5,7 @@ import (
 	"os"
 	"reflect"
 	"strconv"
+	"strings"
 
 	"github.com/joho/godotenv"
 	"github.com/nitzanpap/url-shortener/pkg/colors"
@@ -23,7 +24,7 @@ func LoadConfig() (*Config, error) {
 
 	DBPort, err := strconv.Atoi(os.Getenv("DB_PORT"))
 	if err == nil {
-		log.Fatalf("Error loading .env file: %s", err)
+		log.Fatalf("Error parsing DB_PORT: %s", err)
 	}
 
 	config := &Config{
@@ -38,21 +39,19 @@ func LoadConfig() (*Config, error) {
 		Environment: Environment(os.Getenv("ENV")),
 	}
 
-	v, values := extractConfigFields(config)
-
-	log.Printf(colors.Info("Loaded configuration: %#v\n"), values)
-	isInvalidConfig, errString := doesContainEmptyValues(values, v)
-
-	if isInvalidConfig {
-		log.Fatalf(colors.Error("Error loading configuration: missing values in %s\n"), errString)
-	}
-
 	if config.Environment == Development {
 		configPrettyJsonStr, err := utils.PrettyStruct(*config)
 		if err != nil {
 			log.Fatalf(colors.Error("Error pretty printing config: %v"), err)
 		}
 		log.Printf(colors.Info("Config: %s\n"), configPrettyJsonStr)
+	}
+
+	v, values := extractConfigFields(config)
+	isInvalidConfig, errStringArr := doesContainEmptyValues(values, v)
+
+	if isInvalidConfig {
+		log.Fatalf(colors.Error("Error loading configuration - Missing values in: %s\n"), strings.Join(errStringArr, ", "))
 	}
 
 	return config, nil
@@ -68,22 +67,22 @@ func extractConfigFields(config *Config) (reflect.Value, []interface{}) {
 }
 
 func doesContainEmptyValues(values []interface{}, v reflect.Value) (bool, []string) {
+	var emptyFields []string
 	for i := 0; i < len(values); i++ {
 		if values[i] == "" {
 			emptyEntry := v.Type().Field(i).Name
-			return true, []string{emptyEntry}
-		}
-		// if the value is a struct, recursively check for empty values
-		if reflect.ValueOf(values[i]).Kind() == reflect.Struct {
+			emptyFields = append(emptyFields, emptyEntry)
+		} else if reflect.ValueOf(values[i]).Kind() == reflect.Struct {
+			// if the value is a struct, recursively check for empty values
 			innerValues := make([]interface{}, v.Field(i).NumField())
 			for j := 0; j < v.Field(i).NumField(); j++ {
 				innerValues[j] = v.Field(i).Field(j).Interface()
 			}
-			innerStructValidity, err := doesContainEmptyValues(innerValues, v.Field(i))
-			if innerStructValidity {
-				return true, err
+			isInvalidConfig, errStringArr := doesContainEmptyValues(innerValues, v.Field(i))
+			if isInvalidConfig {
+				emptyFields = append(emptyFields, errStringArr...)
 			}
 		}
 	}
-	return false, nil
+	return len(emptyFields) > 0, emptyFields
 }
