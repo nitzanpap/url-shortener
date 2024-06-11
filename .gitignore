@@ -30,3 +30,4 @@ go.work
 # General
 tmp
 bin
+vendor
