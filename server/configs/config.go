@@ -8,6 +8,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/nitzanpap/url-shortener/pkg/colors"
+	"github.com/nitzanpap/url-shortener/pkg/utils"
 )
 
 // LoadConfig loads the configuration from the environment variables
@@ -47,7 +48,11 @@ func LoadConfig() (*Config, error) {
 	}
 
 	if config.Environment == Development {
-		log.Printf(colors.Info("Config: %#v\n"), config)
+		configPrettyJsonStr, err := PrettyStruct(config)
+		if err != nil {
+			log.Fatalf(colors.Error("Error pretty printing config: %v"), err)
+		}
+		log.Printf(colors.Info("Config: %s\n"), configPrettyJsonStr)
 	}
 
 	return config, nil
