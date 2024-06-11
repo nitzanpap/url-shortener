@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nitzanpap/url-shortener/configs"
@@ -27,10 +28,9 @@ func main() {
 	// Create a Gin router instance
 	router := setupRouter()
 
-	// Start the server on port 8080
-	log.Println("Starting server on :8080")
-	log.Printf(colors.Success("Starting server on: http://localhost:%s\n"), config.Port)
-	if err := router.Run(":" + string(rune(config.Port))); err != nil {
+	// Starting the server
+	log.Printf(colors.Success("Starting server on: http://localhost:%d\n"), config.Port)
+	if err := router.Run(":" + strconv.Itoa(config.Port)); err != nil {
 		log.Fatalf("could not start server: %s\n", err)
 	}
 }

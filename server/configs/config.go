@@ -44,6 +44,9 @@ func LoadConfig() (*Config, error) {
 		Environment: Environment(os.Getenv("ENV")),
 	}
 
+	// if config.Environment is not one of the predefined values, throw an error
+	validateEnvironmentVar(config)
+
 	if config.Environment == Development {
 		configPrettyJsonStr, err := utils.PrettyStruct(*config)
 		if err != nil {
@@ -53,13 +56,22 @@ func LoadConfig() (*Config, error) {
 	}
 
 	v, values := extractConfigFields(config)
-	isInvalidConfig, errStringArr := doesContainEmptyValues(values, v)
+	isInvalidConfig, errStringArr := utils.DoesContainEmptyStrings(values, v)
 
 	if isInvalidConfig {
 		log.Fatalf(colors.Error("Error loading configuration - Missing values in: %s\n"), strings.Join(errStringArr, ", "))
 	}
 
 	return config, nil
+}
+
+func validateEnvironmentVar(config *Config) {
+	for _, env := range []Environment{Development, Production} {
+		if config.Environment == env {
+			return
+		}
+	}
+	log.Fatalf(colors.Error("Error loading configuration - Invalid environment value: %s\n"), config.Environment)
 }
 
 func extractConfigFields(config *Config) (reflect.Value, []interface{}) {
@@ -69,25 +81,4 @@ func extractConfigFields(config *Config) (reflect.Value, []interface{}) {
 		values[i] = v.Field(i).Interface()
 	}
 	return v, values
-}
-
-func doesContainEmptyValues(values []interface{}, v reflect.Value) (bool, []string) {
-	var emptyFields []string
-	for i := 0; i < len(values); i++ {
-		if values[i] == "" {
-			emptyEntry := v.Type().Field(i).Name
-			emptyFields = append(emptyFields, emptyEntry)
-		} else if reflect.ValueOf(values[i]).Kind() == reflect.Struct {
-			// if the value is a struct, recursively check for empty values
-			innerValues := make([]interface{}, v.Field(i).NumField())
-			for j := 0; j < v.Field(i).NumField(); j++ {
-				innerValues[j] = v.Field(i).Field(j).Interface()
-			}
-			isInvalidConfig, errStringArr := doesContainEmptyValues(innerValues, v.Field(i))
-			if isInvalidConfig {
-				emptyFields = append(emptyFields, errStringArr...)
-			}
-		}
-	}
-	return len(emptyFields) > 0, emptyFields
 }
