@@ -22,13 +22,18 @@ func LoadConfig() (*Config, error) {
 		log.Fatalf("Error loading .env file: %s", err)
 	}
 
+	Port, err := strconv.Atoi(os.Getenv("PORT"))
+	if err != nil {
+		log.Fatalf("Error parsing PORT: %s", err)
+	}
+
 	DBPort, err := strconv.Atoi(os.Getenv("DB_PORT"))
-	if err == nil {
+	if err != nil {
 		log.Fatalf("Error parsing DB_PORT: %s", err)
 	}
 
 	config := &Config{
-		Port: os.Getenv("PORT"),
+		Port: Port,
 		Database: DatabaseConfig{
 			Host:     os.Getenv("DB_HOST"),
 			Port:     DBPort,

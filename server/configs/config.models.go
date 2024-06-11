@@ -1,7 +1,7 @@
 package configs
 
 type Config struct {
-	Port        string
+	Port        int
 	Database    DatabaseConfig
 	Environment Environment
 }
