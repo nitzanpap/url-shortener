@@ -3,11 +3,14 @@ package configs
 import (
 	"log"
 	"os"
+	"reflect"
 	"strconv"
 
 	"github.com/joho/godotenv"
+	"github.com/nitzanpap/url-shortener/pkg/colors"
 )
 
+// LoadConfig loads the configuration from the environment variables
 func LoadConfig() (*Config, error) {
 	// Load configuration from file or any other source
 
@@ -17,60 +20,65 @@ func LoadConfig() (*Config, error) {
 		log.Fatalf("Error loading .env file: %s", err)
 	}
 
-	// Getting and using a value from .env
-	Port := os.Getenv("PORT")
-	DbHost := os.Getenv("DB_HOST")
 	DBPort, err := strconv.Atoi(os.Getenv("DB_PORT"))
-	DbUser := os.Getenv("DB_USER")
-	DbPass := os.Getenv("DB_PASS")
-	DbName := os.Getenv("DB_NAME")
-
 	if err == nil {
 		log.Fatalf("Error loading .env file: %s", err)
 	}
 
 	config := &Config{
-		Port: Port,
+		Port: os.Getenv("PORT"),
 		Database: DatabaseConfig{
-			Host:     DbHost,
+			Host:     os.Getenv("DB_HOST"),
 			Port:     DBPort,
-			Username: DbUser,
-			Password: DbPass,
-			Name:     DbName,
+			Username: os.Getenv("DB_USER"),
+			Password: os.Getenv("DB_PASS"),
+			Name:     os.Getenv("DB_NAME"),
 		},
+		Environment: Environment(os.Getenv("ENV")),
+	}
+
+	v, values := extractConfigFields(config)
+
+	log.Printf(colors.Info("Loaded configuration: %#v\n"), values)
+	isInvalidConfig, errString := doesContainEmptyValues(values, v)
+
+	if isInvalidConfig {
+		log.Fatalf(colors.Error("Error loading configuration: missing values in %s\n"), errString)
+	}
+
+	if config.Environment == Development {
+		log.Printf(colors.Info("Config: %#v\n"), config)
 	}
 
 	return config, nil
 }
 
-// usage examples:
+func extractConfigFields(config *Config) (reflect.Value, []interface{}) {
+	v := reflect.ValueOf(*config)
+	values := make([]interface{}, v.NumField())
+	for i := 0; i < v.NumField(); i++ {
+		values[i] = v.Field(i).Interface()
+	}
+	return v, values
+}
 
-// config, err := configs.LoadConfig()
-// if err != nil {
-// 	log.Fatalf("Error loading configuration: %v", err)
-// }
-// fmt.Printf("Config: %#v", config)
-
-// fmt.Printf("Port: %s", config.Port)
-
-// fmt.Printf("Database host: %s", config.Database.Host)
-
-// fmt.Printf("Database port: %d", config.Database.Port)
-
-// fmt.Printf("Database username: %s", config.Database.Username)
-
-// fmt.Printf("Database password: %s", config.Database.Password)
-
-// fmt.Printf("Database name: %s", config.Database.Name)
-
-// Output:
-// Config: &configs.Config{Port:"8080", Database:configs.DatabaseConfig{Host:"localhost", Port:543
-
-// Port: 8080
-// Database host: localhost
-// Database port: 5432
-// Database username: myuser
-// Database password: mypassword
-// Database name: mydatabase
-
-// Note: The output may vary depending on the configuration values
+func doesContainEmptyValues(values []interface{}, v reflect.Value) (bool, []string) {
+	for i := 0; i < len(values); i++ {
+		if values[i] == "" {
+			emptyEntry := v.Type().Field(i).Name
+			return true, []string{emptyEntry}
+		}
+		// if the value is a struct, recursively check for empty values
+		if reflect.ValueOf(values[i]).Kind() == reflect.Struct {
+			innerValues := make([]interface{}, v.Field(i).NumField())
+			for j := 0; j < v.Field(i).NumField(); j++ {
+				innerValues[j] = v.Field(i).Field(j).Interface()
+			}
+			innerStructValidity, err := doesContainEmptyValues(innerValues, v.Field(i))
+			if innerStructValidity {
+				return true, err
+			}
+		}
+	}
+	return false, nil
+}

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -11,11 +10,7 @@ import (
 )
 
 func setupRouter() *gin.Engine {
-	// Disable Console Color
-	// gin.DisableConsoleColor()
 	r := gin.Default()
-
-	// Initialize routes
 	routes.InitializeRoutes(r)
 	return r
 }
@@ -34,7 +29,7 @@ func main() {
 
 	// Start the server on port 8080
 	log.Println("Starting server on :8080")
-	fmt.Printf(colors.Success("Starting server on: http://localhost:%s\n"), config.Port)
+	log.Printf(colors.Success("Starting server on: http://localhost:%s\n"), config.Port)
 	if err := router.Run(":" + config.Port); err != nil {
 		log.Fatalf("could not start server: %s\n", err)
 	}

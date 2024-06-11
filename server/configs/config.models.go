@@ -3,6 +3,7 @@ package configs
 type Config struct {
 	Port     string
 	Database DatabaseConfig
+	Environment Environment
 }
 
 type DatabaseConfig struct {
@@ -12,3 +13,10 @@ type DatabaseConfig struct {
 	Password string
 	Name     string
 }
+
+type Environment string
+
+const (
+	Development Environment = "development"
+	Production  Environment = "production"
+)
