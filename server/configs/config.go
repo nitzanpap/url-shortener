@@ -48,7 +48,7 @@ func LoadConfig() (*Config, error) {
 	}
 
 	if config.Environment == Development {
-		configPrettyJsonStr, err := PrettyStruct(config)
+		configPrettyJsonStr, err := utils.PrettyStruct(*config)
 		if err != nil {
 			log.Fatalf(colors.Error("Error pretty printing config: %v"), err)
 		}
