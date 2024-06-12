@@ -22,7 +22,11 @@ func setupRouter() *gin.Engine {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 		AllowOriginFunc: func(origin string) bool {
-			return origin == config.ClientOrigin || strings.HasPrefix(origin, "http://localhost:")
+			isValidOrigin := strings.Contains(config.ClientOrigin, origin) || strings.HasPrefix(origin, "http://localhost:")
+			if !isValidOrigin {
+				log.Printf(colors.Error("Invalid origin: %s"), origin)
+			}
+			return isValidOrigin
 		},
 		MaxAge: 12 * time.Hour,
 	}))
@@ -30,11 +34,20 @@ func setupRouter() *gin.Engine {
 	return r
 }
 
+func setGinMode(config *configs.Config) {
+	switch config.Environment {
+	case configs.Development:
+		gin.SetMode(gin.DebugMode)
+	case configs.Production:
+		gin.SetMode(gin.ReleaseMode)
+	}
+}
+
 func main() {
 	config := configs.LoadConfig()
 
-	// Set Gin to production mode
-	gin.SetMode(gin.ReleaseMode)
+	// Set Gin to production mode according to the environment in a switch statement
+	setGinMode(config)
 
 	// Create a Gin router instance
 	router := setupRouter()
