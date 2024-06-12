@@ -30,7 +30,6 @@ For the server:
 
 For the client:
 
-- Node.js: [Download and install Node.js](https://nodejs.org/en/download/)
 - npm: [Download and install npm](https://www.npmjs.com/get-npm)
 
 ### Installing
