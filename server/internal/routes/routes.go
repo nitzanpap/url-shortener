@@ -11,29 +11,31 @@ func InitializeRoutes(r *gin.Engine) {
 	var db = make(map[string]string)
 
 	r.GET("/", handlers.HomeHandler)
-	r.GET("/about", handlers.AboutHandler)
 
-	v1 := r.Group("/v1")
+	api := r.Group("/api")
 	{
+		api.GET("/", handlers.HomeHandler) // This route should instead display the API documentation
+		v1 := api.Group("/v1")
+		{
+			v1.GET("/", func(c *gin.Context) {
+				c.JSON(http.StatusOK, gin.H{"status": "ok", "version": "v1"})
+			})
 
-		v1.GET("/", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{"status": "ok", "version": "v1"})
-		})
+			v1.GET("/health", func(c *gin.Context) {
+				c.JSON(http.StatusOK, gin.H{"status": "ok"})
+			})
 
-		v1.GET("/health", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{"status": "ok"})
-		})
+			// Get user value
+			v1.GET("/user/:name", func(c *gin.Context) {
+				user := c.Params.ByName("name")
+				value, ok := db[user]
+				if ok {
+					c.JSON(http.StatusOK, gin.H{"user": user, "value": value})
+				} else {
+					c.JSON(http.StatusOK, gin.H{"user": user, "status": "no value"})
+				}
+			})
 
-		// Get user value
-		v1.GET("/user/:name", func(c *gin.Context) {
-			user := c.Params.ByName("name")
-			value, ok := db[user]
-			if ok {
-				c.JSON(http.StatusOK, gin.H{"user": user, "value": value})
-			} else {
-				c.JSON(http.StatusOK, gin.H{"user": user, "status": "no value"})
-			}
-		})
-
+		}
 	}
 }
