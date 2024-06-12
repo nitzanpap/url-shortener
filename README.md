@@ -12,8 +12,8 @@ This project is a simple URL shortener service, similar to Bit.ly or TinyURL. It
 ## Technologies
 
 - **Backend:** Go, Gin
-- **Database:** PostgreSQL (with GORM)
-- **Frontend:** Next.js, SCSS.modules
+- **Database:** PostgreSQL
+- **Frontend:** Next.js, TypeScript, Tailwind CSS
 
 ## Getting Started
 
@@ -60,16 +60,77 @@ A step by step series of examples that tell you how to get a development env run
 
 3. Run the server via make:
 
-    ```bash
-    make run/live
-    ```
+    - For development, run with live reload:
 
-    Or via Docker:
+        ```bash
+        make run/live
+        ```
 
-    ```bash
-    docker compose up
-    ```
+    - Or build and run the server:
+
+        1. Manually:
+
+            ```bash
+            make build
+            make run
+            ```
+
+        2. Via Docker:
+
+            ```bash
+            docker compose up
+            ```
 
 ### Client Setup
 
-- TBD
+1. Change into the client directory:
+
+    ```bash
+    cd client
+    ```
+
+2. Create a `.env.local` file in the client directory:
+
+    ```bash
+    touch .env.local
+    ```
+
+    Make sure to populate the `.env.local` file according to the `.env.example` file.
+
+3. Install the dependencies:
+
+    ```bash
+    npm install
+    # or
+    yarn
+    # or
+    pnpm install
+    # or
+    bun install
+    ```
+
+4. Run the development server:
+
+    - For development:
+
+        ```bash
+        npm run dev
+        # or
+        yarn dev
+        # or
+        pnpm dev
+        # or
+        bun dev
+        ```
+
+    - For production:
+
+        ```bash
+        npm run build && npm start
+        # or
+        yarn build && yarn start
+        # or
+        pnpm build && pnpm start
+        # or
+        bun build && bun start
+        ```
