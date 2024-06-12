@@ -1,5 +1,9 @@
 {
   "name": "client",
+  "author": {
+    "email": "nitzanpap@gmail.com",
+    "name": "Nitzan Papini"
+  },
   "version": "0.1.0",
   "private": true,
   "scripts": {
