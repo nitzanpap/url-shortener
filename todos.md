@@ -6,6 +6,7 @@
 - [x] Install necessary Go packages
 - [x] Set up Docker environment
 - [x] Create basic CI/CD pipeline
+- [x] Fix CORS
 - [ ] Create database schema in PostgreSQL
 - [ ] Implement authentication and authorization
 - [ ] Implement API endpoints for CRUD operations
