@@ -2,30 +2,9 @@
 
 ## Server Tasks
 
-- [ ] Set up Go project structure along the lines of:
-
-    ```markdown
-    .
-    ├── cmd
-    │   └── server
-    │       └── main.go
-    ├── internal
-    │   ├── controllers
-    │   │   └── controllers.go
-    │   ├── models
-    │   │   └── models.go
-    │   ├── repository
-    │   │   └── repository.go
-    │   └── server
-    │       └── server.go
-    ├── pkg
-    │   └── utils
-    │       └── utils.go
-    ├── go.mod
-    └── go.sum
-    ```
-
-- [ ] Install necessary Go packages
+- [x] Set up Go project structure
+- [x] Install necessary Go packages
+- [x] Set up Docker environment
 - [ ] Create database schema in PostgreSQL
 - [ ] Implement API endpoints for CRUD operations
 - [ ] Write unit tests for server code
@@ -41,10 +20,10 @@
 
 ## General Tasks
 
-- [ ] Set up Git repository
-- [ ] Initialize version control
-- [ ] Create README.md file
-- [ ] Document project setup and usage
+- [x] Set up Git repository
+- [x] Initialize version control
+- [x] Create README.md file
+- [x] Document project setup and usage
 - [ ] Deploy the web app to a hosting platform
 - [ ] Test the application thoroughly
 - [ ] Fix any bugs or issues found during testing
