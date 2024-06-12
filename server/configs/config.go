@@ -13,7 +13,7 @@ import (
 )
 
 // LoadConfig loads the configuration from the environment variables
-func LoadConfig() (*Config, error) {
+func LoadConfig() *Config {
 	// Load configuration from file or any other source
 
 	// Find .env file
@@ -41,7 +41,8 @@ func LoadConfig() (*Config, error) {
 			Password: os.Getenv("DB_PASS"),
 			Name:     os.Getenv("DB_NAME"),
 		},
-		Environment: Environment(os.Getenv("ENV")),
+		Environment:  Environment(os.Getenv("ENV")),
+		ClientOrigin: os.Getenv("CLIENT_ORIGIN"),
 	}
 
 	// if config.Environment is not one of the predefined values, throw an error
@@ -62,7 +63,7 @@ func LoadConfig() (*Config, error) {
 		log.Fatalf(colors.Error("Error loading configuration - Missing values in: %s\n"), strings.Join(errStringArr, ", "))
 	}
 
-	return config, nil
+	return config
 }
 
 func validateEnvironmentVar(config *Config) {

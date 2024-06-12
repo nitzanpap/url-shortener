@@ -4,6 +4,7 @@ type Config struct {
 	Port        int
 	Database    DatabaseConfig
 	Environment Environment
+	ClientOrigin string
 }
 
 type DatabaseConfig struct {
