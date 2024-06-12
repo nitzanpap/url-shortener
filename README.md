@@ -100,12 +100,6 @@ A step by step series of examples that tell you how to get a development env run
 
     ```bash
     npm install
-    # or
-    yarn
-    # or
-    pnpm install
-    # or
-    bun install
     ```
 
 4. Run the development server:
@@ -114,22 +108,10 @@ A step by step series of examples that tell you how to get a development env run
 
         ```bash
         npm run dev
-        # or
-        yarn dev
-        # or
-        pnpm dev
-        # or
-        bun dev
         ```
 
     - For production:
 
         ```bash
         npm run build && npm start
-        # or
-        yarn build && yarn start
-        # or
-        pnpm build && pnpm start
-        # or
-        bun build && bun start
         ```
