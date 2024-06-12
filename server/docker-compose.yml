@@ -1,6 +1,6 @@
 version: "3.5"
 
-name: url-shortener-app
+name: url-shortener-server
 
 services:
   app:
