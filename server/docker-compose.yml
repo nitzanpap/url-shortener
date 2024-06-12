@@ -1,0 +1,16 @@
+version: "3.5"
+
+name: url-shortener-app
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: url-shortener-container
+    env_file:
+      - ./.env
+    environment:
+      - PORT=${PORT}
+    ports:
+      - "${PORT}:${PORT}"

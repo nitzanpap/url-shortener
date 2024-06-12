@@ -42,19 +42,34 @@ A step by step series of examples that tell you how to get a development env run
     cd url-shortener
     ```
 
-// TODO: Add instructions for creating a PostgreSQL database
-3. Create a new PostgreSQL database:
+#### Server Setup
 
-// TODO: Add instructions for creating a `.env` file
-4. Create a `.env` file in the root of the project and add the following environment variables:
-
-// TODO: Add instructions for running the application
-
-5. Run the application:
+1. Change into the server directory:
 
     ```bash
-    go run main.go
+    cd server
     ```
 
-// TODO: Add instructions for visiting the application in the browser
-6. Visit the application in your browser:
+2. Create a `.env` file in the server directory:
+
+    ```bash
+    touch .env
+    ```
+
+    Make sure to populate the `.env` file according to the `.env.example` file.
+
+3. Run the server via make:
+
+    ```bash
+    make run/live
+    ```
+
+    Or via Docker:
+
+    ```bash
+    docker compose up
+    ```
+
+### Client Setup
+
+- TBD
