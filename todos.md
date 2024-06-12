@@ -16,8 +16,8 @@
 
 - [x] Set up a base Next.js project
 - [x] Create basic CI/CD pipeline
-- [ ] Implement authentication and authorization
 - [ ] Implement UI for URL shortening
+- [ ] Implement authentication and authorization
 - [ ] Implement UI for viewing shortened URLs
 - [ ] Implement UI for editing shortened URLs
 - [ ] Implement UI for deleting shortened URLs
