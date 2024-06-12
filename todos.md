@@ -5,17 +5,21 @@
 - [x] Set up Go project structure
 - [x] Install necessary Go packages
 - [x] Set up Docker environment
+- [x] Create basic CI/CD pipeline
 - [ ] Create database schema in PostgreSQL
+- [ ] Implement authentication and authorization
 - [ ] Implement API endpoints for CRUD operations
 - [ ] Write unit tests for server code
 
 ## Client Tasks
 
-- [ ] Set up Next.js project structure
-- [ ] Install necessary npm packages
-- [ ] Design and create UI components
-- [ ] Implement client-side routing
-- [ ] Integrate with server API endpoints
+- [x] Set up a base Next.js project
+- [x] Create basic CI/CD pipeline
+- [ ] Implement authentication and authorization
+- [ ] Implement UI for URL shortening
+- [ ] Implement UI for viewing shortened URLs
+- [ ] Implement UI for editing shortened URLs
+- [ ] Implement UI for deleting shortened URLs
 - [ ] Write unit tests for client code
 
 ## General Tasks
@@ -24,8 +28,4 @@
 - [x] Initialize version control
 - [x] Create README.md file
 - [x] Document project setup and usage
-- [ ] Deploy the web app to a hosting platform
-- [ ] Test the application thoroughly
-- [ ] Fix any bugs or issues found during testing
-- [ ] Optimize and refactor code for performance
-- [ ] Write comprehensive documentation
+- [ ] Write integration tests for the entire application
