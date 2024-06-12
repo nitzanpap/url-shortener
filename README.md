@@ -23,8 +23,15 @@ These instructions will get you a copy of the project up and running on your loc
 
 What things you need to install the software and how to install them:
 
+For the server:
+
 - Go: [Download and install Go](https://golang.org/doc/install)
 - PostgreSQL: [Download and install PostgreSQL](https://www.postgresql.org/download/)
+
+For the client:
+
+- Node.js: [Download and install Node.js](https://nodejs.org/en/download/)
+- npm: [Download and install npm](https://www.npmjs.com/get-npm)
 
 ### Installing
 
