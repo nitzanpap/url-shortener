@@ -80,7 +80,7 @@ A step by step series of examples that tell you how to get a development env run
             docker compose up
             ```
 
-### Client Setup
+#### Client Setup
 
 1. Change into the client directory:
 
