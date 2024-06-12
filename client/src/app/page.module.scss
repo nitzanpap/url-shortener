@@ -1,16 +1,35 @@
-.main {
+.pageContainer {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  min-height: 100vh;
+  justify-content: flex-start;
+  align-items: flex-start;
   width: 100%;
-
+  min-height: 100vh;
+  color: white;
+  gap: 1rem;
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin-bottom: 2rem;
+  }
+  .main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    .titleContainer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      .title {
+        font-size: 2rem;
+        font-weight: 700;
+      }
+    }
   }
 }
