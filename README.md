@@ -71,8 +71,7 @@ A step by step series of examples that tell you how to get a development env run
         1. Manually:
 
             ```bash
-            make build
-            make run
+            make build && make run
             ```
 
         2. Via Docker:
