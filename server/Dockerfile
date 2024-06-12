@@ -18,5 +18,5 @@ RUN apt update && apt install -y make
 RUN make build
 
 # When running the container, run "make run"
-CMD ["make", "run"]
+CMD pwd && echo "---" && ls -a && echo "---" && make run
 

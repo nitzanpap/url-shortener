@@ -1,5 +1,3 @@
-version: "3.5"
-
 name: url-shortener-server
 
 services:
