@@ -1,6 +1,6 @@
 # Change these variables as necessary.
-MAIN_PACKAGE_PATH := ./cmd/example
-BINARY_NAME := example
+MAIN_PACKAGE_PATH := ./cmd/
+BINARY_NAME := main
 
 # ==================================================================================== #
 # HELPERS
@@ -74,20 +74,3 @@ run/live:
 		--build.exclude_dir "" \
 		--build.include_ext "go, tpl, tmpl, html, css, scss, js, ts, sql, jpeg, jpg, gif, png, bmp, svg, webp, ico" \
 		--misc.clean_on_exit "true"
-
-
-# ==================================================================================== #
-# OPERATIONS
-# ==================================================================================== #
-
-## push: push changes to the remote Git repository
-.PHONY: push
-push: tidy audit no-dirty
-	git push
-
-## production/deploy: deploy the application to production
-.PHONY: production/deploy
-production/deploy: confirm tidy audit no-dirty
-	GOOS=linux GOARCH=amd64 go build -ldflags='-s' -o=/tmp/bin/linux_amd64/${BINARY_NAME} ${MAIN_PACKAGE_PATH}
-	upx -5 /tmp/bin/linux_amd64/${BINARY_NAME}
-	# Include additional deployment steps here...
