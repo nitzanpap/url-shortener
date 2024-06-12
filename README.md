@@ -15,7 +15,7 @@ View the live application [here](https://url-shortener-three-ashy.vercel.app/) ð
 
 - **Backend:** Go, Gin
 - **Database:** PostgreSQL
-- **Frontend:** Next.js, TypeScript, Tailwind CSS
+- **Frontend:** Next.js, TypeScript, SCSS.modules
 
 ## Getting Started
 
