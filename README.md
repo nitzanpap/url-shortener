@@ -51,6 +51,8 @@ A step by step series of examples that tell you how to get a development env run
 
 #### Server Setup
 
+- **Note:** If you are using VS Code, you can use the `Go` extension to install the necessary tools and dependencies.
+
 1. Change into the server directory:
 
     ```bash
@@ -122,3 +124,11 @@ A step by step series of examples that tell you how to get a development env run
         ```bash
         npm run build && npm start
         ```
+
+## Debugging
+
+If you are using VS Code, you can use the `launch.json` configurations to debug the server and client code.
+
+## Deployment
+
+I am deploying the server to render.com and the client to Vercel. You can deploy the server and client to any platform of your choice.

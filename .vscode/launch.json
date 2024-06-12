@@ -6,12 +6,38 @@
   "configurations": [
     {
       // A launch configuration that runs golang from the current workspace/cmd/main.go
-      "name": "Run Debug",
+      "name": "Debug Server",
       "type": "go",
       "request": "launch",
       "mode": "debug",
       "program": "${workspaceFolder}/server/cmd/main.go",
       "cwd": "${workspaceFolder}/server"
+    },
+    {
+      "name": "Next.js: debug server-side",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}/client"
+    },
+    {
+      "name": "Next.js: debug client-side",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "cwd": "${workspaceFolder}/client"
+    },
+    {
+      "name": "Next.js: debug full stack",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "serverReadyAction": {
+        "pattern": "- Local:.+(https?://.+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome"
+      },
+      "cwd": "${workspaceFolder}/client"
     }
   ]
 }
