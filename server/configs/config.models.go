@@ -13,6 +13,7 @@ type DatabaseConfig struct {
 	Username string
 	Password string
 	Name     string
+	DB_URL   string
 }
 
 type Environment string
@@ -20,4 +21,11 @@ type Environment string
 const (
 	Development Environment = "development"
 	Production  Environment = "production"
+)
+
+type DbConnectionType string
+
+const (
+	SingleConnection DbConnectionType = "single"
+	PoolConnection   DbConnectionType = "pool"
 )

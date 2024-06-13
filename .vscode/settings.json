@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["fatih", "gonic", "joho"],
+  "cSpell.words": ["fatih", "gonic", "jackc", "joho", "pgxpool"],
   "makefile.makefilePath": "./server/Makefile",
   "makefile.configurations": [
     {

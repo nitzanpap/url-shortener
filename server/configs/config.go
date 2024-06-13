@@ -1,12 +1,16 @@
 package configs
 
 import (
+	"context"
+	"fmt"
 	"log"
 	"os"
 	"reflect"
 	"strconv"
 	"strings"
 
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 	"github.com/nitzanpap/url-shortener/pkg/colors"
 	"github.com/nitzanpap/url-shortener/pkg/utils"
@@ -26,23 +30,31 @@ func LoadConfig() *Config {
 	if err != nil {
 		log.Fatalf("Error parsing PORT: %s", err)
 	}
+	DB_HOST := os.Getenv("DB_HOST")
 
-	DBPort, err := strconv.Atoi(os.Getenv("DB_PORT"))
+	DB_Port, err := strconv.Atoi(os.Getenv("DB_PORT"))
 	if err != nil {
 		log.Fatalf("Error parsing DB_PORT: %s", err)
 	}
+	DB_USER := os.Getenv("DB_USER")
+	DB_PASS := os.Getenv("DB_PASS")
+	DB_NAME := os.Getenv("DB_NAME")
+	DB_URL := buildDbURL(DB_HOST, os.Getenv("DB_PORT"), DB_USER, DB_PASS, DB_NAME)
+	Environment := Environment(os.Getenv("ENV"))
+	ClientOrigin := os.Getenv("CLIENT_ORIGIN")
 
 	config := &Config{
 		Port: Port,
 		Database: DatabaseConfig{
-			Host:     os.Getenv("DB_HOST"),
-			Port:     DBPort,
-			Username: os.Getenv("DB_USER"),
-			Password: os.Getenv("DB_PASS"),
-			Name:     os.Getenv("DB_NAME"),
+			Host:     DB_HOST,
+			Port:     DB_Port,
+			Username: DB_USER,
+			Password: DB_PASS,
+			Name:     DB_NAME,
+			DB_URL:   DB_URL,
 		},
-		Environment:  Environment(os.Getenv("ENV")),
-		ClientOrigin: os.Getenv("CLIENT_ORIGIN"),
+		Environment:  Environment,
+		ClientOrigin: ClientOrigin,
 	}
 
 	// if config.Environment is not one of the predefined values, throw an error
@@ -64,6 +76,30 @@ func LoadConfig() *Config {
 	}
 
 	return config
+}
+
+// Define the buildDbURL function
+func buildDbURL(host, port, user, pass, name string) string {
+	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s", user, pass, host, port, name)
+}
+
+// returns either a (pgx.Conn, error) or a (pgxpool.Pool, error)
+func ConnectToDB(dbURL string) (*pgx.Conn, error) {
+	// Connect to the database via pgx for single connection
+	conn, err := pgx.Connect(context.Background(), dbURL)
+	if err != nil {
+		return nil, err
+	}
+	return conn, nil
+}
+
+func ConnectToDBPool(dbURL string) (*pgxpool.Pool, error) {
+	// Connect to the database via pgx for pool connection
+	dbPool, err := pgxpool.New(context.Background(), dbURL)
+	if err != nil {
+		log.Fatalf(colors.Error("Unable to create connection pool: %v\n"), err)
+	}
+	return dbPool, nil
 }
 
 func validateEnvironmentVar(config *Config) {

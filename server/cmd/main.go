@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"strconv"
 	"strings"
@@ -34,20 +35,34 @@ func setupRouter() *gin.Engine {
 	return r
 }
 
-func setGinMode(config *configs.Config) {
+func GetGinMode(config *configs.Config) (mode string) {
 	switch config.Environment {
 	case configs.Development:
-		gin.SetMode(gin.DebugMode)
+		return gin.DebugMode
 	case configs.Production:
-		gin.SetMode(gin.ReleaseMode)
+		return gin.ReleaseMode
+	default:
+		log.Fatalf(colors.Error("Invalid environment: %s"), config.Environment)
+		return gin.DebugMode
 	}
 }
 
 func main() {
 	config := configs.LoadConfig()
 
-	// Set Gin to production mode according to the environment in a switch statement
-	setGinMode(config)
+	gin.SetMode(GetGinMode(config))
+
+	dbPool, err := configs.ConnectToDBPool(config.Database.DB_URL)
+	if err != nil {
+		log.Fatalf(colors.Error("could not connect to database: %s\n"), err)
+	}
+	defer dbPool.Close()
+
+	// Test the connection to the database and print the response
+	if err := dbPool.Ping(context.Background()); err != nil {
+		log.Fatalf(colors.Error("could not ping database: %s\n"), err)
+	}
+	log.Print(colors.Success("Successfully connected to database\n"))
 
 	// Create a Gin router instance
 	router := setupRouter()
