@@ -2,7 +2,10 @@ package utils
 
 import (
 	"encoding/json"
+	"net/http"
 	"reflect"
+
+	"github.com/gin-gonic/gin"
 )
 
 func PrettyStruct(data interface{}) (string, error) {
@@ -32,4 +35,13 @@ func DoesContainEmptyStrings(values []interface{}, v reflect.Value) (bool, []str
 		}
 	}
 	return len(emptyFields) > 0, emptyFields
+}
+
+// OkHandler accepts a version number that is an integer or nil.
+func OkHandler(c *gin.Context, version *int) {
+	if version == nil {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "version": version})
 }

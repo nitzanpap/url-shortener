@@ -5,37 +5,34 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/nitzanpap/url-shortener/server/internal/handlers"
+	"github.com/nitzanpap/url-shortener/server/internal/urls"
+	"github.com/nitzanpap/url-shortener/server/pkg/utils"
 )
 
 func InitializeRoutes(r *gin.Engine) {
-	var db = make(map[string]string)
-
-	r.GET("/", handlers.HomeHandler)
+	r.GET("/", func(c *gin.Context) {
+		utils.OkHandler(c, nil)
+	})
 
 	api := r.Group("/api")
 	{
-		api.GET("/", handlers.HomeHandler) // This route should instead display the API documentation
+		api.GET("/", func(c *gin.Context) {
+			utils.OkHandler(c, nil)
+		})
 		v1 := api.Group("/v1")
 		{
 			v1.GET("/", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{"status": "ok", "version": "v1"})
+				// This route should instead display the API documentation.
+				// For now, it will redirect to the health check route.
+				c.Redirect(http.StatusMovedPermanently, "/api/v1/health")
 			})
 
 			v1.GET("/health", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{"status": "ok"})
+				version := 1
+				utils.OkHandler(c, &version)
 			})
-
-			// Get user value
-			v1.GET("/user/:name", func(c *gin.Context) {
-				user := c.Params.ByName("name")
-				value, ok := db[user]
-				if ok {
-					c.JSON(http.StatusOK, gin.H{"user": user, "value": value})
-				} else {
-					c.JSON(http.StatusOK, gin.H{"user": user, "status": "no value"})
-				}
-			})
+			
+			urls.UrlsGroupHandler(v1)
 
 		}
 	}
