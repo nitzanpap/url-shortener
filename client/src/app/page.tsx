@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react"
 import styles from "./page.module.scss"
 import { generalStrings } from "@/constants/constants"
-import { isServerAvailable } from "../api/serverApi"
+import { generateShortUrl, isServerAvailable } from "../api/serverApi"
+import { isValidUrl } from "@/utils/utils"
 
 export default function Home() {
   const [url, setUrl] = useState<string>("")
@@ -12,8 +13,21 @@ export default function Home() {
     setUrl(e.target.value)
   }
 
-  const handleGenerateButtonClicked = () => {
-    console.log("Generate button clicked")
+  const handleGenerateButtonClicked = async () => {
+    // check if the URL is valid
+
+    if (!isValidUrl(url)) {
+      console.log("Invalid URL")
+      return
+    }
+
+    // send the URL to the server
+    const generatedUrl = await generateShortUrl(url)
+    if (generatedUrl) {
+      console.log("Generated URL:", generatedUrl)
+    } else {
+      console.log("Failed to generate short URL")
+    }
   }
 
   useEffect(() => {
@@ -21,10 +35,6 @@ export default function Home() {
       console.log("Is server available?", await isServerAvailable())
     })
   }, [])
-
-  useEffect(() => {
-    console.log("URL:", url)
-  }, [url])
 
   return (
     <section className={styles.pageContainer}>
