@@ -12,6 +12,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
+
 	"github.com/nitzanpap/url-shortener/pkg/colors"
 	"github.com/nitzanpap/url-shortener/pkg/utils"
 )
