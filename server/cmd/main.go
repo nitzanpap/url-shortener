@@ -10,9 +10,9 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
-	"github.com/nitzanpap/url-shortener/configs"
-	"github.com/nitzanpap/url-shortener/internal/routes"
-	"github.com/nitzanpap/url-shortener/pkg/colors"
+	"github.com/nitzanpap/url-shortener/server/configs"
+	"github.com/nitzanpap/url-shortener/server/internal/routes"
+	"github.com/nitzanpap/url-shortener/server/pkg/colors"
 )
 
 func setupRouter() *gin.Engine {

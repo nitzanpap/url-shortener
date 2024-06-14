@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/nitzanpap/url-shortener/internal/handlers"
+	"github.com/nitzanpap/url-shortener/server/internal/handlers"
 )
 
 func InitializeRoutes(r *gin.Engine) {

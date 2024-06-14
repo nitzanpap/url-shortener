@@ -13,8 +13,8 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 
-	"github.com/nitzanpap/url-shortener/pkg/colors"
-	"github.com/nitzanpap/url-shortener/pkg/utils"
+	"github.com/nitzanpap/url-shortener/server/pkg/colors"
+	"github.com/nitzanpap/url-shortener/server/pkg/utils"
 )
 
 // LoadConfig loads the configuration from the environment variables

@@ -1,4 +1,4 @@
-module github.com/nitzanpap/url-shortener
+module github.com/nitzanpap/url-shortener/server
 
 go 1.22.4
 
