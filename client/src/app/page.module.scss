@@ -19,6 +19,7 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    flex-grow: 1;
 
     .titleContainer {
       display: flex;
@@ -29,6 +30,21 @@
       .title {
         font-size: 2rem;
         font-weight: 700;
+        padding: 1rem 0;
+      }
+    }
+
+    .contentContainer {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      width: 100%;
+      gap: 1rem;
+      flex-grow: 1;
+      .content {
+        font-size: 1.5rem;
+        font-weight: 400;
       }
     }
   }
