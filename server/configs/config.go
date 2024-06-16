@@ -103,25 +103,33 @@ func ConnectToDBPool(dbURL string) (*pgxpool.Pool, error) {
 	return dbPool, nil
 }
 
-func InitDB(dbPool *pgxpool.Pool) {
+func InitDB(db *pgx.Conn) {
 	// Create the Users table if it does not exist
-	_, err := dbPool.Exec(context.Background(), `CREATE TABLE IF NOT EXISTS users (
-		id SERIAL PRIMARY KEY,
+	_, err := db.Exec(context.Background(), `CREATE TABLE IF NOT EXISTS users (
+		user_id SERIAL PRIMARY KEY,
 		username TEXT NOT NULL,
-		password TEXT NOT NULL
+		hashed_password TEXT NOT NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		UNIQUE (username)
 	);`)
 	if err != nil {
 		log.Fatalf(colors.Error("Unable to create users table: %v\n"), err)
 	}
 
-	// Create the URLs table if it does not exist
-	_, err = dbPool.Exec(context.Background(), `CREATE TABLE IF NOT EXISTS urls (
-		id SERIAL PRIMARY KEY,
-		user_id INT NOT NULL,
-		original_url TEXT NOT NULL,
-		short_url TEXT NOT NULL,
-		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-	);`)
+	// Create the URLs table if it does not exist.
+	_, err = db.Exec(context.Background(), `
+    CREATE TABLE IF NOT EXISTS urls (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER,
+        original_url TEXT NOT NULL,
+        hash TEXT NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		FOREIGN KEY (user_id) REFERENCES users(user_id),
+        UNIQUE (original_url),
+        UNIQUE (hash)
+    );
+	`)
 	if err != nil {
 		log.Fatalf(colors.Error("Unable to create urls table: %v\n"), err)
 	}

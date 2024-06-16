@@ -9,14 +9,14 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5"
 
 	"github.com/nitzanpap/url-shortener/server/configs"
 	"github.com/nitzanpap/url-shortener/server/internal/routes"
 	"github.com/nitzanpap/url-shortener/server/pkg/colors"
 )
 
-func setupRouter(dbPool *pgxpool.Pool) *gin.Engine {
+func setupRouter(db *pgx.Conn) *gin.Engine {
 	config := configs.LoadConfig()
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
@@ -33,7 +33,7 @@ func setupRouter(dbPool *pgxpool.Pool) *gin.Engine {
 		},
 		MaxAge: 12 * time.Hour,
 	}))
-	routes.InitializeRoutes(r, dbPool)
+	routes.InitializeRoutes(r, db)
 	return r
 }
 
@@ -54,23 +54,23 @@ func main() {
 
 	gin.SetMode(GetGinMode(config))
 
-	dbPool, err := configs.ConnectToDBPool(config.Database.DB_URL)
+	db, err := configs.ConnectToDB(config.Database.DB_URL)
 	if err != nil {
 		log.Fatalf(colors.Error("could not connect to database: %s\n"), err)
 	}
-	defer dbPool.Close()
+	defer db.Close(context.Background())
 
 	// Test the connection to the database and print the response
-	if err := dbPool.Ping(context.Background()); err != nil {
+	if err := db.Ping(context.Background()); err != nil {
 		log.Fatalf(colors.Error("could not ping database: %s\n"), err)
 	}
 	log.Print(colors.Success("Successfully connected to database\n"))
 
-	configs.InitDB(dbPool)
+	configs.InitDB(db)
 	log.Print(colors.Success("Successfully initialized database\n"))
 
 	// Create a Gin router instance
-	router := setupRouter(dbPool)
+	router := setupRouter(db)
 
 	// Starting the server
 	log.Printf(colors.Success("Starting server on: http://localhost:%d\n"), config.Port)

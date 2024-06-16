@@ -4,20 +4,20 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5"
 
 	"github.com/nitzanpap/url-shortener/server/internal/urls"
 	"github.com/nitzanpap/url-shortener/server/pkg/utils"
 )
 
-func InitializeRoutes(r *gin.Engine, dbPool *pgxpool.Pool) {
+func InitializeRoutes(r *gin.Engine, db *pgx.Conn) {
 	r.GET("/", func(c *gin.Context) {
 		utils.OkHandler(c, nil)
 	})
 
 	getUrlFromHash := r.Group("/h")
 	{
-		urls.HashHandler(getUrlFromHash, dbPool)
+		urls.HashHandler(getUrlFromHash, db)
 	}
 
 	api := r.Group("/api")
@@ -38,7 +38,7 @@ func InitializeRoutes(r *gin.Engine, dbPool *pgxpool.Pool) {
 				utils.OkHandler(c, &version)
 			})
 
-			urls.UrlGroupHandler(v1, dbPool)
+			urls.UrlGroupHandler(v1, db)
 		}
 	}
 }

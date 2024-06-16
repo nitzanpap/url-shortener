@@ -5,15 +5,15 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5"
 	"github.com/nitzanpap/url-shortener/server/pkg/colors"
 )
 
 // this route is: POST /h/:hash, and it returns the original URL
-func HashHandler(r *gin.RouterGroup, dbPool *pgxpool.Pool) {
+func HashHandler(r *gin.RouterGroup, db *pgx.Conn) {
 	r.GET("/:hash", func(c *gin.Context) {
 		hash := c.Param("hash")
-		actualUrl, err := getUrl(hash, dbPool)
+		actualUrl, err := getUrl(hash, db)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get URL"})
 			return
@@ -27,7 +27,7 @@ func HashHandler(r *gin.RouterGroup, dbPool *pgxpool.Pool) {
 }
 
 // This route is: GET /api/v1/url/:hash
-func UrlGroupHandler(r *gin.RouterGroup, dbPool *pgxpool.Pool) {
+func UrlGroupHandler(r *gin.RouterGroup, db *pgx.Conn) {
 	url := r.Group("/url")
 	{
 		// This route receives a POST request with a JSON body that contains a URL, and returns a shortened URL.
@@ -44,7 +44,7 @@ func UrlGroupHandler(r *gin.RouterGroup, dbPool *pgxpool.Pool) {
 				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid URL"})
 				return
 			}
-			hashedUrl, err := saveUrl(request.URL, dbPool)
+			hashedUrl, err := saveUrl(request.URL, db)
 			if err != nil {
 				log.Fatalf(colors.Error("Failed to save URL: %s"), err)
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate short URL"})
