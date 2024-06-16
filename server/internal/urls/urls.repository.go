@@ -6,19 +6,17 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-// This is the repository layer for the URLs service. It is responsible for interacting with the database.
-
-func saveUrlInDb(url string, hashedUrl string, db *pgx.Conn) error {
-	_, err := db.Exec(context.Background(), `INSERT INTO urls (original_url, hash) VALUES ($1, $2)`, url, hashedUrl)
+func saveUrlInDb(url string, obfuscatedShortenedUrl string, db *pgx.Conn) error {
+	_, err := db.Exec(context.Background(), `INSERT INTO urls (original_url, obfuscated_shortened_url) VALUES ($1, $2)`, url, obfuscatedShortenedUrl)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func getUrlFromDb(hash string, db *pgx.Conn) (string, error) {
+func getUrlFromDb(obfuscatedShortenedUrl string, db *pgx.Conn) (string, error) {
 	var url string
-	err := db.QueryRow(context.Background(), `SELECT original_url FROM urls WHERE hash = $1`, hash).Scan(&url)
+	err := db.QueryRow(context.Background(), `SELECT original_url FROM urls WHERE obfuscated_shortened_url = $1`, obfuscatedShortenedUrl).Scan(&url)
 	if err != nil {
 		return "", err
 	}

@@ -15,9 +15,9 @@ func InitializeRoutes(r *gin.Engine, db *pgx.Conn) {
 		utils.OkHandler(c, nil)
 	})
 
-	getUrlFromHash := r.Group("/h")
+	getUrlFromObfuscatedShortenedUrl := r.Group("/s")
 	{
-		urls.HashHandler(getUrlFromHash, db)
+		urls.ShortUrlHandler(getUrlFromObfuscatedShortenedUrl, db)
 	}
 
 	api := r.Group("/api")

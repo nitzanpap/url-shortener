@@ -123,11 +123,11 @@ func InitDB(db *pgx.Conn) {
         id SERIAL PRIMARY KEY,
         user_id INTEGER,
         original_url TEXT NOT NULL,
-        hash TEXT NOT NULL,
+        obfuscated_shortened_url TEXT NOT NULL,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		FOREIGN KEY (user_id) REFERENCES users(user_id),
         UNIQUE (original_url),
-        UNIQUE (hash)
+        UNIQUE (obfuscated_shortened_url)
     );
 	`)
 	if err != nil {

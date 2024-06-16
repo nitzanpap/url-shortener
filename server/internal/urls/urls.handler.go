@@ -9,11 +9,11 @@ import (
 	"github.com/nitzanpap/url-shortener/server/pkg/colors"
 )
 
-// this route is: POST /h/:hash, and it returns the original URL
-func HashHandler(r *gin.RouterGroup, db *pgx.Conn) {
-	r.GET("/:hash", func(c *gin.Context) {
-		hash := c.Param("hash")
-		actualUrl, err := getUrl(hash, db)
+// this route is: POST /h/:obfuscatedShortenedUrl, and it returns the original URL
+func ShortUrlHandler(r *gin.RouterGroup, db *pgx.Conn) {
+	r.GET("/:obfuscatedShortenedUrl", func(c *gin.Context) {
+		obfuscatedShortenedUrl := c.Param("obfuscatedShortenedUrl")
+		actualUrl, err := getUrl(obfuscatedShortenedUrl, db)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get URL"})
 			return
@@ -26,7 +26,7 @@ func HashHandler(r *gin.RouterGroup, db *pgx.Conn) {
 	})
 }
 
-// This route is: GET /api/v1/url/:hash
+// This route is: GET /api/v1/url/:obfuscatedShortenedUrl
 func UrlGroupHandler(r *gin.RouterGroup, db *pgx.Conn) {
 	url := r.Group("/url")
 	{
@@ -44,14 +44,14 @@ func UrlGroupHandler(r *gin.RouterGroup, db *pgx.Conn) {
 				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid URL"})
 				return
 			}
-			hashedUrl, err := saveUrl(request.URL, db)
+			obfuscatedShortenedUrl, err := saveUrl(request.URL, db)
 			if err != nil {
 				log.Fatalf(colors.Error("Failed to save URL: %s"), err)
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate short URL"})
 				return
 			}
 
-			c.JSON(http.StatusCreated, gin.H{"urlHash": hashedUrl})
+			c.JSON(http.StatusCreated, gin.H{"obfuscatedShortenedUrl": obfuscatedShortenedUrl})
 		})
 	}
 }
