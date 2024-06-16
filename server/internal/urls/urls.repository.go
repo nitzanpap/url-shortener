@@ -7,7 +7,8 @@ import (
 )
 
 func saveUrlInDb(url string, obfuscatedShortenedUrl string, db *pgx.Conn) error {
-	_, err := db.Exec(context.Background(), `INSERT INTO urls (original_url, obfuscated_shortened_url) VALUES ($1, $2)`, url, obfuscatedShortenedUrl)
+	_, err := db.Prepare(context.Background(), "createUrlRow", `INSERT INTO urls (original_url, obfuscated_shortened_url) VALUES ($1, $2)`)
+	db.Exec(context.Background(), "createUrlRow", url, obfuscatedShortenedUrl)
 	if err != nil {
 		return err
 	}
