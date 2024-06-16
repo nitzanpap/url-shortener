@@ -65,6 +65,9 @@ func main() {
 	}
 	log.Print(colors.Success("Successfully connected to database\n"))
 
+	configs.InitDB(dbPool)
+	log.Print(colors.Success("Successfully initialized database\n"))
+
 	// Create a Gin router instance
 	router := setupRouter()
 
