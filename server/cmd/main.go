@@ -9,13 +9,14 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/nitzanpap/url-shortener/server/configs"
 	"github.com/nitzanpap/url-shortener/server/internal/routes"
 	"github.com/nitzanpap/url-shortener/server/pkg/colors"
 )
 
-func setupRouter() *gin.Engine {
+func setupRouter(dbPool *pgxpool.Pool) *gin.Engine {
 	config := configs.LoadConfig()
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
@@ -32,7 +33,7 @@ func setupRouter() *gin.Engine {
 		},
 		MaxAge: 12 * time.Hour,
 	}))
-	routes.InitializeRoutes(r)
+	routes.InitializeRoutes(r, dbPool)
 	return r
 }
 
@@ -69,7 +70,7 @@ func main() {
 	log.Print(colors.Success("Successfully initialized database\n"))
 
 	// Create a Gin router instance
-	router := setupRouter()
+	router := setupRouter(dbPool)
 
 	// Starting the server
 	log.Printf(colors.Success("Starting server on: http://localhost:%d\n"), config.Port)

@@ -3,7 +3,7 @@ import { configurations } from "../configs/config"
 
 const apiVersion = "v1"
 const serverApi = axios.create({
-  baseURL: `${configurations.envVars.serverBaseUrl}/api/${apiVersion}/`,
+  baseURL: `${configurations.envVars.serverBaseUrl}api/${apiVersion}/`,
 })
 
 const urlsEndpoint = "urls/"
