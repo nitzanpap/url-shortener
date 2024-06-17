@@ -2,15 +2,23 @@ package urls
 
 import (
 	"context"
+	"errors"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/nitzanpap/url-shortener/server/configs"
 )
 
 func saveUrlInDb(url string, obfuscatedShortenedUrl string, db *pgx.Conn) error {
 	_, err := db.Exec(context.Background(), configs.PreparedStatements.CreateUserRow, url, obfuscatedShortenedUrl)
 	if err != nil {
-		return err
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			// 23505 means the url already exists in the database, so we can ignore this error
+			if pgErr.Code != "23505" {
+				return err
+			}
+		}
 	}
 	return nil
 }
