@@ -177,8 +177,15 @@ func createPreparedStatements(db *pgx.Conn) {
 		PreparedStatements.GetUrlsByUserId: `SELECT id, user_id, original_url, obfuscated_shortened_url FROM urls WHERE user_id = $1`,
 	}
 
+	// Deallocate all prepared statements beforehand
+	_, err := db.Exec(context.Background(), "DEALLOCATE ALL")
+	if err != nil {
+		log.Fatalf(colors.Error("Failed to deallocate prepared statements: %s\n"), err)
+	}
+
 	for stmtName, stmtQuery := range preparedStatements {
-		_, err := db.Prepare(context.Background(), stmtName, stmtQuery)
+		// Prepare the statement
+		_, err = db.Prepare(context.Background(), stmtName, stmtQuery)
 		if err != nil {
 			log.Fatalf(colors.Error("Failed to create prepared statement %s: %s\n"), stmtName, err)
 		}
