@@ -8,6 +8,7 @@
 - [x] Create basic CI/CD pipeline
 - [x] Fix CORS
 - [x] Implement URL shortening
+- [ ] Refactor
 - [ ] Implement authentication and authorization
 - [ ] Implement API endpoints for CRUD operations
 - [ ] Write unit tests for server code
