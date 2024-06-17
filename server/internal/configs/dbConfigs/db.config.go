@@ -1,13 +1,26 @@
-package configs
+package dbconfigs
 
 import (
 	"context"
 	"log"
+	"os"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/nitzanpap/url-shortener/server/pkg/colors"
+	"github.com/nitzanpap/url-shortener/server/pkg/utils"
 )
+
+func GetDatabaseConfig() DatabaseConfig {
+	return DatabaseConfig{
+		Host:     os.Getenv("DB_HOST"),
+		Port:     utils.GetEnvAsInt("DB_PORT"),
+		Username: os.Getenv("DB_USER"),
+		Password: os.Getenv("DB_PASS"),
+		Name:     os.Getenv("DB_NAME"),
+		DB_URL:   utils.BuildPostgresqlDbURL(os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME")),
+	}
+}
 
 // returns either a (pgx.Conn, error) or a (pgxpool.Pool, error)
 func ConnectToDB(dbURL string) (*pgx.Conn, error) {
@@ -35,7 +48,9 @@ func InitDB(db *pgx.Conn) {
 
 func createDbTables(db *pgx.Conn) {
 	// Create the Users table if it does not exist
-	_, err := db.Exec(context.Background(), `CREATE TABLE IF NOT EXISTS users (
+	_, err := db.Exec(
+		context.Background(),
+		`CREATE TABLE IF NOT EXISTS users (
 		user_id SERIAL PRIMARY KEY,
 		username TEXT NOT NULL,
 		hashed_password TEXT NOT NULL,
@@ -48,8 +63,9 @@ func createDbTables(db *pgx.Conn) {
 	}
 
 	// Create the URLs table if it does not exist.
-	_, err = db.Exec(context.Background(), `
-    CREATE TABLE IF NOT EXISTS urls (
+	_, err = db.Exec(
+		context.Background(),
+		`CREATE TABLE IF NOT EXISTS urls (
         id SERIAL PRIMARY KEY,
         user_id INTEGER,
         original_url TEXT NOT NULL,

@@ -2,8 +2,11 @@ package utils
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
+	"os"
 	"reflect"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -44,4 +47,12 @@ func OkHandler(c *gin.Context, version *int) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"status": "ok", "version": version})
+}
+
+func GetEnvAsInt(key string) int {
+	value, err := strconv.Atoi(os.Getenv(key))
+	if err != nil {
+		log.Fatalf("Error parsing %s: %s", key, err)
+	}
+	return value
 }

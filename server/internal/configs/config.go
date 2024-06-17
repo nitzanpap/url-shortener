@@ -4,11 +4,11 @@ import (
 	"log"
 	"os"
 	"reflect"
-	"strconv"
 	"strings"
 
 	"github.com/joho/godotenv"
 
+	dbconfigs "github.com/nitzanpap/url-shortener/server/internal/configs/dbConfigs"
 	"github.com/nitzanpap/url-shortener/server/pkg/colors"
 	"github.com/nitzanpap/url-shortener/server/pkg/utils"
 )
@@ -24,8 +24,8 @@ func LoadConfig() *Config {
 	}
 
 	config := &Config{
-		Port:         getEnvAsInt("PORT"),
-		Database:     getDatabaseConfig(),
+		Port:         utils.GetEnvAsInt("PORT"),
+		Database:     dbconfigs.GetDatabaseConfig(),
 		Environment:  getEnvironment(),
 		ClientOrigin: os.Getenv("CLIENT_ORIGIN"),
 	}
@@ -45,25 +45,6 @@ func LoadConfig() *Config {
 	}
 
 	return config
-}
-
-func getEnvAsInt(key string) int {
-	value, err := strconv.Atoi(os.Getenv(key))
-	if err != nil {
-		log.Fatalf("Error parsing %s: %s", key, err)
-	}
-	return value
-}
-
-func getDatabaseConfig() DatabaseConfig {
-	return DatabaseConfig{
-		Host:     os.Getenv("DB_HOST"),
-		Port:     getEnvAsInt("DB_PORT"),
-		Username: os.Getenv("DB_USER"),
-		Password: os.Getenv("DB_PASS"),
-		Name:     os.Getenv("DB_NAME"),
-		DB_URL:   utils.BuildPostgresqlDbURL(os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME")),
-	}
 }
 
 func getEnvironment() Environment {

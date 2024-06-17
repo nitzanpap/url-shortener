@@ -1,4 +1,4 @@
-package configs
+package serverconfigs
 
 import (
 	"log"
@@ -7,15 +7,16 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/nitzanpap/url-shortener/server/internal/configs"
 	"github.com/nitzanpap/url-shortener/server/pkg/colors"
 )
 
-func SetupGinServer(config *Config) *gin.Engine {
+func SetupGinServer(config *configs.Config) *gin.Engine {
 	r := gin.Default()
 	SetCors(r, config)
 	return r
 }
-func SetCors(r *gin.Engine, config *Config) {
+func SetCors(r *gin.Engine, config *configs.Config) {
 	r.Use(cors.New(cors.Config{
 		AllowMethods:     []string{"PUT", "PATCH", "GET", "POST", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
@@ -32,11 +33,11 @@ func SetCors(r *gin.Engine, config *Config) {
 	}))
 }
 
-func GetGinMode(config *Config) (mode string) {
+func GetGinMode(config *configs.Config) (mode string) {
 	switch config.Environment {
-	case Development:
+	case configs.Development:
 		return gin.DebugMode
-	case Production:
+	case configs.Production:
 		return gin.ReleaseMode
 	default:
 		log.Fatalf(colors.Error("Invalid environment: %s"), config.Environment)
