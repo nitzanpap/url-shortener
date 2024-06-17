@@ -133,6 +133,8 @@ func InitDB(db *pgx.Conn) {
 	if err != nil {
 		log.Fatalf(colors.Error("Unable to create urls table: %v\n"), err)
 	}
+
+	createPreparedStatements(db)
 }
 
 func validateEnvironmentVar(config *Config) {
@@ -151,4 +153,34 @@ func extractConfigFields(config *Config) (reflect.Value, []interface{}) {
 		values[i] = v.Field(i).Interface()
 	}
 	return v, values
+}
+
+// Create a PreparedStatements enum to hold the prepared statements' names
+type preparedStatementsStruct struct {
+	CreateUserRow, GetUserRow, CreateUrlRow, GetUrlRow, GetUrlsByUserId string
+}
+
+var PreparedStatements = preparedStatementsStruct{
+	CreateUserRow:   "createUserRow",
+	GetUserRow:      "getUserRow",
+	CreateUrlRow:    "createUrlRow",
+	GetUrlRow:       "getUrlRow",
+	GetUrlsByUserId: "getUrlsByUserId",
+}
+
+func createPreparedStatements(db *pgx.Conn) {
+	preparedStatements := map[string]string{
+		PreparedStatements.CreateUserRow:   `INSERT INTO users (username, hashed_password) VALUES ($1, $2)`,
+		PreparedStatements.GetUserRow:      `SELECT user_id, username, hashed_password FROM users WHERE username = $1`,
+		PreparedStatements.CreateUrlRow:    `INSERT INTO urls (user_id, original_url, obfuscated_shortened_url) VALUES ($1, $2, $3)`,
+		PreparedStatements.GetUrlRow:       `SELECT id, user_id, original_url, obfuscated_shortened_url FROM urls WHERE obfuscated_shortened_url = $1`,
+		PreparedStatements.GetUrlsByUserId: `SELECT id, user_id, original_url, obfuscated_shortened_url FROM urls WHERE user_id = $1`,
+	}
+
+	for stmtName, stmtQuery := range preparedStatements {
+		_, err := db.Prepare(context.Background(), stmtName, stmtQuery)
+		if err != nil {
+			log.Fatalf(colors.Error("Failed to create prepared statement %s: %s\n"), stmtName, err)
+		}
+	}
 }

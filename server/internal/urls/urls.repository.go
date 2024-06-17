@@ -4,11 +4,11 @@ import (
 	"context"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/nitzanpap/url-shortener/server/configs"
 )
 
 func saveUrlInDb(url string, obfuscatedShortenedUrl string, db *pgx.Conn) error {
-	_, err := db.Prepare(context.Background(), "createUrlRow", `INSERT INTO urls (original_url, obfuscated_shortened_url) VALUES ($1, $2)`)
-	db.Exec(context.Background(), "createUrlRow", url, obfuscatedShortenedUrl)
+	_, err := db.Exec(context.Background(), configs.PreparedStatements.CreateUserRow, url, obfuscatedShortenedUrl)
 	if err != nil {
 		return err
 	}
