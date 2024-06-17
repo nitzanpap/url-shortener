@@ -21,6 +21,8 @@
 - [x] Implement URL redirection
 - [x] Improve overall UI
 - [ ] Add a `Copy` button for copying shortened URLs
+- [ ] Add a cool animation when copying shortened URLs
+- [ ] Add a loading spinner when generating shortened URLs
 - [ ] Implement authentication and authorization
 - [ ] Implement UI for viewing shortened URLs
 - [ ] Implement UI for editing shortened URLs
