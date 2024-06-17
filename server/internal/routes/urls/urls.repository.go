@@ -6,11 +6,11 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
-	"github.com/nitzanpap/url-shortener/server/internal/configs"
+	dbconfigs "github.com/nitzanpap/url-shortener/server/internal/configs/dbConfigs"
 )
 
 func saveUrlInDb(url string, obfuscatedShortenedUrl string, db *pgx.Conn) error {
-	_, err := db.Exec(context.Background(), configs.PreparedStatements.CreateUrlRow, url, obfuscatedShortenedUrl, nil)
+	_, err := db.Exec(context.Background(), dbconfigs.PreparedStatements.CreateUrlRow, url, obfuscatedShortenedUrl, nil)
 	if err != nil {
 		var pgErr *pgconn.PgError
 		if errors.As(err, &pgErr) && pgErr != nil {
