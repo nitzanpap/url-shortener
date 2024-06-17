@@ -6,7 +6,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
-	"github.com/nitzanpap/url-shortener/server/configs"
+	"github.com/nitzanpap/url-shortener/server/internal/configs"
 )
 
 func saveUrlInDb(url string, obfuscatedShortenedUrl string, db *pgx.Conn) error {

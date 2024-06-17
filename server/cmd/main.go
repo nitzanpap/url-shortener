@@ -4,55 +4,19 @@ import (
 	"context"
 	"log"
 	"strconv"
-	"strings"
-	"time"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5"
 
-	"github.com/nitzanpap/url-shortener/server/configs"
+	"github.com/nitzanpap/url-shortener/server/internal/configs"
 	"github.com/nitzanpap/url-shortener/server/internal/routes"
 	"github.com/nitzanpap/url-shortener/server/pkg/colors"
+	"github.com/nitzanpap/url-shortener/server/pkg/utils"
 )
-
-func setupRouter(db *pgx.Conn) *gin.Engine {
-	config := configs.LoadConfig()
-	r := gin.Default()
-	r.Use(cors.New(cors.Config{
-		AllowMethods:     []string{"PUT", "PATCH", "GET", "POST", "DELETE"},
-		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		AllowOriginFunc: func(origin string) bool {
-			isValidOrigin := strings.Contains(config.ClientOrigin, origin) || strings.HasPrefix(origin, "http://localhost:")
-			if !isValidOrigin {
-				log.Printf(colors.Error("Invalid origin: %s"), origin)
-			}
-			return isValidOrigin
-		},
-		MaxAge: 12 * time.Hour,
-	}))
-	routes.InitializeRoutes(r, db)
-	return r
-}
-
-func GetGinMode(config *configs.Config) (mode string) {
-	switch config.Environment {
-	case configs.Development:
-		return gin.DebugMode
-	case configs.Production:
-		return gin.ReleaseMode
-	default:
-		log.Fatalf(colors.Error("Invalid environment: %s"), config.Environment)
-		return gin.DebugMode
-	}
-}
 
 func main() {
 	config := configs.LoadConfig()
 
-	gin.SetMode(GetGinMode(config))
+	gin.SetMode(configs.GetGinMode(config))
 
 	db, err := configs.ConnectToDB(config.Database.DB_URL)
 	if err != nil {
@@ -60,17 +24,15 @@ func main() {
 	}
 	defer db.Close(context.Background())
 
-	// Test the connection to the database and print the response
-	if err := db.Ping(context.Background()); err != nil {
-		log.Fatalf(colors.Error("could not ping database: %s\n"), err)
-	}
-	log.Print(colors.Success("Successfully connected to database\n"))
+	// Test the connection to the database
+	utils.TestDBConnection(db)
 
 	configs.InitDB(db)
 	log.Print(colors.Success("Successfully initialized database\n"))
 
 	// Create a Gin router instance
-	router := setupRouter(db)
+	router := configs.SetupGinServer(config)
+	routes.InitializeRoutes(router, db)
 
 	// Starting the server
 	log.Printf(colors.Success("Starting server on: http://localhost:%d\n"), config.Port)

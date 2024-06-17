@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
 
-	"github.com/nitzanpap/url-shortener/server/internal/urls"
+	"github.com/nitzanpap/url-shortener/server/internal/routes/urls"
 	"github.com/nitzanpap/url-shortener/server/pkg/utils"
 )
 

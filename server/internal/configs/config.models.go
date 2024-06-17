@@ -29,3 +29,7 @@ const (
 	SingleConnection DbConnectionType = "single"
 	PoolConnection   DbConnectionType = "pool"
 )
+
+type preparedStatementsStruct struct {
+	CreateUserRow, GetUserRow, CreateUrlRow, GetUrlRow, GetUrlsByUserId string
+}
