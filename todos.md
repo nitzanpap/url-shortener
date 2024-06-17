@@ -7,7 +7,7 @@
 - [x] Set up Docker environment
 - [x] Create basic CI/CD pipeline
 - [x] Fix CORS
-- [ ] Create database schema in PostgreSQL
+- [x] Implement URL shortening
 - [ ] Implement authentication and authorization
 - [ ] Implement API endpoints for CRUD operations
 - [ ] Write unit tests for server code
@@ -16,7 +16,8 @@
 
 - [x] Set up a base Next.js project
 - [x] Create basic CI/CD pipeline
-- [ ] Implement UI for URL shortening
+- [x] Implement UI for URL shortening
+- [x] Implement URL redirection
 - [ ] Implement authentication and authorization
 - [ ] Implement UI for viewing shortened URLs
 - [ ] Implement UI for editing shortened URLs
