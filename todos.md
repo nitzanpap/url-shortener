@@ -19,7 +19,8 @@
 - [x] Create basic CI/CD pipeline
 - [x] Implement UI for URL shortening
 - [x] Implement URL redirection
-- [ ] Improve overall UI
+- [x] Improve overall UI
+- [x] Add a `Copy` button for copying shortened URLs
 - [ ] Implement authentication and authorization
 - [ ] Implement UI for viewing shortened URLs
 - [ ] Implement UI for editing shortened URLs
