@@ -1,9 +1,7 @@
 export default function ShortUrlPageLayout({
   children,
-  params,
-}: {
+}: Readonly<{
   children: React.ReactNode
-  params: { slug: string[] }
-}) {
+}>) {
   return <>{children}</>
 }

@@ -1,6 +1,6 @@
 import { UrlShortener } from "@/components/urlShortener/urlShortener"
-import styles from "./page.module.scss"
 import { generalStrings } from "@/constants/constants"
+import styles from "./page.module.scss"
 
 export default function Home() {
   return (

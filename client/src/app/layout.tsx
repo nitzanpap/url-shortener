@@ -1,10 +1,10 @@
+import { configurations } from "@/configs/config"
+import { generalStrings } from "@/constants/constants"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import { generalStrings } from "@/constants/constants"
-import { configurations } from "@/configs/config"
 // All packages except `@mantine/hooks` require styles imports
-import "./global.scss"
 import "@mantine/core/styles.css"
+import "./global.scss"
 
 import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core"
 
