@@ -19,10 +19,10 @@ func ShortUrlHandler(r *gin.RouterGroup, db *pgx.Conn) {
 			return
 		}
 		if !isUrlValid(actualUrl) {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get URL"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid URL"})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"url": actualUrl})
+		c.JSON(http.StatusOK, gin.H{"originalUrl": actualUrl})
 	})
 }
 

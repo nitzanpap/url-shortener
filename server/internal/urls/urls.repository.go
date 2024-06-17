@@ -10,15 +10,17 @@ import (
 )
 
 func saveUrlInDb(url string, obfuscatedShortenedUrl string, db *pgx.Conn) error {
-	_, err := db.Exec(context.Background(), configs.PreparedStatements.CreateUserRow, url, obfuscatedShortenedUrl)
+	_, err := db.Exec(context.Background(), configs.PreparedStatements.CreateUrlRow, url, obfuscatedShortenedUrl, nil)
 	if err != nil {
 		var pgErr *pgconn.PgError
-		if errors.As(err, &pgErr) {
+		if errors.As(err, &pgErr) && pgErr != nil {
 			// 23505 means the url already exists in the database, so we can ignore this error
-			if pgErr.Code != "23505" {
-				return err
+			if pgErr.Code == "23505" {
+				return nil
 			}
+			return err
 		}
+		return err
 	}
 	return nil
 }

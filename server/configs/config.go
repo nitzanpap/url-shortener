@@ -172,7 +172,7 @@ func createPreparedStatements(db *pgx.Conn) {
 	preparedStatements := map[string]string{
 		PreparedStatements.CreateUserRow:   `INSERT INTO users (username, hashed_password) VALUES ($1, $2)`,
 		PreparedStatements.GetUserRow:      `SELECT user_id, username, hashed_password FROM users WHERE username = $1`,
-		PreparedStatements.CreateUrlRow:    `INSERT INTO urls (user_id, original_url, obfuscated_shortened_url) VALUES ($1, $2, $3)`,
+		PreparedStatements.CreateUrlRow:    `INSERT INTO urls (original_url, obfuscated_shortened_url, user_id) VALUES ($1, $2, $3)`,
 		PreparedStatements.GetUrlRow:       `SELECT id, user_id, original_url, obfuscated_shortened_url FROM urls WHERE obfuscated_shortened_url = $1`,
 		PreparedStatements.GetUrlsByUserId: `SELECT id, user_id, original_url, obfuscated_shortened_url FROM urls WHERE user_id = $1`,
 	}
