@@ -18,6 +18,7 @@
 - [x] Create basic CI/CD pipeline
 - [x] Implement UI for URL shortening
 - [x] Implement URL redirection
+- [ ] Improve overall UI
 - [ ] Implement authentication and authorization
 - [ ] Implement UI for viewing shortened URLs
 - [ ] Implement UI for editing shortened URLs
