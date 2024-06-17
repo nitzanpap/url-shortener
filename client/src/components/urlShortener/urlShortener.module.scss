@@ -1,8 +1,16 @@
 .urlShortenerContainer {
   display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 1rem;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   width: 100%;
+  gap: 1rem;
+
+  .buttonsContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+  }
 }
