@@ -1,13 +1,15 @@
 "use client"
-import { generateShortUrl, isServerAvailable } from "@/api/serverApi"
+import { getShortUrlHash, isServerAvailable } from "@/api/serverApi"
 import { isValidUrl } from "@/utils/utils"
 import { useState, useEffect } from "react"
 import styles from "./urlShortener.module.scss"
 import { Button, TextInput, useMantineTheme } from "@mantine/core"
+import Link from "next/link"
 
 export const UrlShortener = () => {
   const [urlInput, setUrlInput] = useState<string>("")
   const [isInputReady, setIsInputReady] = useState(false)
+  const [shortUrl, setShortUrl] = useState<string>("")
   const inputErrMsg = !isInputReady && urlInput && "Invalid URL"
   const theme = useMantineTheme()
 
@@ -29,12 +31,13 @@ export const UrlShortener = () => {
       return
     }
     // send the URL to the server
-    const generatedUrl = await generateShortUrl(urlInput)
-    if (generatedUrl) {
-      console.log("Generated URL:", generatedUrl)
-    } else {
+    const shortUrlHashResData = await getShortUrlHash(urlInput)
+    if (!shortUrlHashResData) {
       console.log("Failed to generate short URL")
+      return
     }
+    const { obfuscatedShortenedUrl: shortUrlHash } = shortUrlHashResData
+    setShortUrl(`${window.location.origin}/s/${shortUrlHash}`)
   }
 
   useEffect(() => {
@@ -65,6 +68,11 @@ export const UrlShortener = () => {
       >
         Generate
       </Button>
+      {shortUrl && (
+        <a href={shortUrl} className={styles.shortUrl}>
+          {shortUrl}
+        </a>
+      )}
     </section>
   )
 }

@@ -6,7 +6,7 @@ import { configurations } from "@/configs/config"
 import "./global.scss"
 import "@mantine/core/styles.css"
 
-import { ColorSchemeScript, createTheme, MantineColorsTuple, MantineProvider } from "@mantine/core"
+import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core"
 
 const inter = Inter({ subsets: ["latin"] })
 
