@@ -21,8 +21,8 @@
 - [x] Implement URL redirection
 - [x] Improve overall UI
 - [x] Add a `Clear` button for clearing the input field
-- [ ] Add a `Copy` button for copying shortened URLs
-- [ ] Fix the url validator
+- [x] Add a `Copy` button for copying shortened URLs
+- [ ] Improve the url validator
 - [ ] Add toast notifications
 - [ ] Add a cool animation when copying shortened URLs
 - [ ] Add a loading spinner when generating shortened URLs
