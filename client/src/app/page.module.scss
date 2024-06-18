@@ -44,6 +44,11 @@
       width: 100%;
       gap: 1rem;
       flex-grow: 1;
+      .shortUrlContainer {
+        .shortUrl {
+          word-break: break-all;
+        }
+      }
     }
   }
 }

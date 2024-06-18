@@ -5,11 +5,12 @@ import { Button, useMantineTheme } from "@mantine/core"
 import { useEffect, useState } from "react"
 import TextInputField from "../TextInputField/TextInputField"
 import styles from "./urlShortener.module.scss"
+import { useShortUrlContext } from "@/app/page"
 
 export const UrlShortener = () => {
   const [urlInput, setUrlInput] = useState<string>("")
   const [isInputReady, setIsInputReady] = useState(false)
-  const [shortUrl, setShortUrl] = useState<string>("")
+  const { shortUrl, setShortUrl } = useShortUrlContext()
   const inputErrMsg = !isInputReady && urlInput ? "Invalid URL" : ""
   const theme = useMantineTheme()
 
@@ -47,46 +48,43 @@ export const UrlShortener = () => {
   }, [])
 
   return (
-    <section className={styles.urlShortenerContainer}>
-      <TextInputField
-        type="url"
-        name="url"
-        id="url"
-        className={styles.urlInput}
-        placeholder="Enter URL"
-        required
-        error={inputErrMsg}
-        value={urlInput}
-        onChange={handleUrlInputChanged}
-      />
-      <div className={styles.buttonsContainer}>
-      <Button
-        className={styles.urlButton}
-        onClick={handleGenerateButtonClicked}
-        disabled={!isInputReady}
-        variant="gradient"
-        gradient={{ from: theme.primaryColor, to: theme.colors.red[8] }}
-        >
-        Generate
-      </Button>
-      <Button
-        className={styles.clearButton}
-        onClick={() => {
-          setUrlInput("")
-          setShortUrl("")
-        }}
-        disabled={!urlInput && !shortUrl}
-        variant="gradient"
-        gradient={{ from: theme.primaryColor, to: theme.colors.red[8] }}
-        >
-        Clear
-      </Button>
+    <section className={styles.urlShortenerSection}>
+      <div className={styles.urlShortenerContainer}>
+        <TextInputField
+          type="url"
+          name="url"
+          id="url"
+          className={styles.urlInput}
+          placeholder="Enter URL"
+          required
+          error={inputErrMsg}
+          value={urlInput}
+          onChange={handleUrlInputChanged}
+        />
+        <div className={styles.buttonsContainer}>
+          <Button
+            className={styles.urlButton}
+            onClick={handleGenerateButtonClicked}
+            disabled={!isInputReady}
+            variant="gradient"
+            gradient={{ from: theme.primaryColor, to: theme.colors.blue[4] }}
+          >
+            Generate
+          </Button>
+          <Button
+            className={styles.clearButton}
+            onClick={() => {
+              setUrlInput("")
+              setShortUrl("")
+            }}
+            disabled={!urlInput && !shortUrl}
+            variant="gradient"
+            gradient={{ from: theme.colors.red[8], to: theme.colors.red[4] }}
+          >
+            Clear
+          </Button>
         </div>
-      {shortUrl && (
-        <a href={shortUrl} className={styles.shortUrl}>
-          {shortUrl}
-        </a>
-      )}
+      </div>
     </section>
   )
 }

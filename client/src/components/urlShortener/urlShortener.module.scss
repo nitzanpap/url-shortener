@@ -1,4 +1,4 @@
-.urlShortenerContainer {
+.urlShortenerSection {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -6,11 +6,36 @@
   width: 100%;
   gap: 1rem;
 
-  .buttonsContainer {
+  @media only screen and (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .urlShortenerContainer {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
     width: 100%;
     gap: 1rem;
+
+    @media only screen and (min-width: 768px) {
+      flex-direction: row;
+    }
+    .urlInput{
+    }
+
+    .buttonsContainer {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      
+      @media only screen and (min-width: 768px) {
+        flex-flow: row nowrap;
+      }
+    }
   }
 }
