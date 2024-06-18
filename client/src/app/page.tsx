@@ -1,19 +1,10 @@
 "use client"
+import { useState } from "react"
 import { UrlShortener } from "@/components/urlShortener/urlShortener"
 import { generalStrings } from "@/constants/constants"
 import styles from "./page.module.scss"
-import { createContext, useContext, useState } from "react"
 import { Button } from "@mantine/core"
-
-const ShortUrlContext = createContext({ shortUrl: "", setShortUrl: (_: string) => {} })
-
-export const useShortUrlContext = () => {
-  const context = useContext(ShortUrlContext)
-  if (!context) {
-    throw new Error("useShortUrlContext must be used within a ShortUrlProvider")
-  }
-  return context
-}
+import { ShortUrlContext, useShortUrlContext } from "@/hooks/useShortUrlContext"
 
 export default function Home() {
   const [shortUrl, setShortUrl] = useState<string>("")

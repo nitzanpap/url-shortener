@@ -5,7 +5,7 @@ import { Button, useMantineTheme } from "@mantine/core"
 import { useEffect, useState } from "react"
 import TextInputField from "../TextInputField/TextInputField"
 import styles from "./urlShortener.module.scss"
-import { useShortUrlContext } from "@/app/page"
+import { useShortUrlContext } from "@/hooks/useShortUrlContext"
 
 export const UrlShortener = () => {
   const [urlInput, setUrlInput] = useState<string>("")
