@@ -1,10 +1,10 @@
 "use client"
-import { useState } from "react"
 import { UrlShortener } from "@/components/urlShortener/urlShortener"
 import { generalStrings } from "@/constants/constants"
-import styles from "./page.module.scss"
+import { ShortUrlContext } from "@/hooks/useShortUrlContext"
 import { Button } from "@mantine/core"
-import { ShortUrlContext, useShortUrlContext } from "@/hooks/useShortUrlContext"
+import { useState } from "react"
+import styles from "./page.module.scss"
 
 export default function Home() {
   const [shortUrl, setShortUrl] = useState<string>("")

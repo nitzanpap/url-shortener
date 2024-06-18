@@ -1,11 +1,11 @@
 "use client"
 import { getShortUrlHash, isServerAvailable } from "@/api/serverApi"
+import { useShortUrlContext } from "@/hooks/useShortUrlContext"
 import { isValidUrl } from "@/utils/utils"
 import { Button, useMantineTheme } from "@mantine/core"
 import { useEffect, useState } from "react"
 import TextInputField from "../TextInputField/TextInputField"
 import styles from "./urlShortener.module.scss"
-import { useShortUrlContext } from "@/hooks/useShortUrlContext"
 
 export const UrlShortener = () => {
   const [urlInput, setUrlInput] = useState<string>("")
