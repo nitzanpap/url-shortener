@@ -22,6 +22,7 @@
 - [x] Improve overall UI
 - [x] Add a `Clear` button for clearing the input field
 - [x] Add a `Copy` button for copying shortened URLs
+- [ ] Fix initial theme flicker
 - [ ] Improve the url validator
 - [ ] Add toast notifications
 - [ ] Add a cool animation when copying shortened URLs
