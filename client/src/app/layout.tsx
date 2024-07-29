@@ -6,6 +6,7 @@ import { Inter } from "next/font/google"
 import "@mantine/core/styles.css"
 import "./global.scss"
 
+import ToastProvider from "@/components/ToastProvider/ToastProvider"
 import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -48,7 +49,7 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <MantineProvider defaultColorScheme="dark" theme={theme}>
-          {children}
+          <ToastProvider>{children}</ToastProvider>
         </MantineProvider>
       </body>
     </html>

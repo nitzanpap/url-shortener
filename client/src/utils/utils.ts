@@ -1,3 +1,5 @@
+import { Id, toast, ToastOptions } from "react-toastify"
+
 export const isValidUrl = (str: string): boolean => {
   var pattern = new RegExp(
     "^(https?:\\/\\/)?" + // protocol
@@ -9,4 +11,23 @@ export const isValidUrl = (str: string): boolean => {
     "i"
   ) // fragment locator
   return !!pattern.test(str)
+}
+
+export const errorToast = (message: string) => {
+  console.error(message)
+  toast.error(message)
+}
+
+export const updateLoadingToast = (
+  toastId: Id,
+  message: string,
+  toastType: ToastOptions["type"],
+  autoClose?: ToastOptions["autoClose"]
+) => {
+  toast.update(toastId, {
+    render: message,
+    type: toastType,
+    autoClose: autoClose,
+    isLoading: false,
+  })
 }

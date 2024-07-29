@@ -1,9 +1,10 @@
 "use client"
 import { getShortUrlHash, isServerAvailable } from "@/api/serverApi"
 import { useShortUrlContext } from "@/hooks/useShortUrlContext"
-import { isValidUrl } from "@/utils/utils"
+import { errorToast, isValidUrl, updateLoadingToast } from "@/utils/utils"
 import { Button, useMantineTheme } from "@mantine/core"
 import { useEffect, useState } from "react"
+import { toast } from "react-toastify"
 import TextInputField from "../TextInputField/TextInputField"
 import styles from "./urlShortener.module.scss"
 
@@ -28,22 +29,41 @@ export const UrlShortener = () => {
 
   const handleGenerateButtonClicked = async () => {
     if (!isValidUrl(urlInput)) {
-      console.log("Invalid URL")
+      errorToast("Invalid URL")
       return
     }
     // send the URL to the server
     const shortUrlHashResData = await getShortUrlHash(urlInput)
+    const generatingUrlToastId = toast.loading("Generating short URL...")
     if (!shortUrlHashResData) {
-      console.log("Failed to generate short URL")
+      errorToast("Failed to generate short URL")
       return
     }
+    toast.update(generatingUrlToastId, {
+      render: "Short URL generated",
+      type: "success",
+      autoClose: 2000,
+      isLoading: false,
+    })
     const { obfuscatedShortenedUrl: shortUrlHash } = shortUrlHashResData
     setShortUrl(`${window.location.origin}/s/${shortUrlHash}`)
   }
 
   useEffect(() => {
-    new Promise<void>(async (resolve, reject) => {
-      console.log("Is server available?", await isServerAvailable())
+    // isServerAvailable is an async function
+    const serverLoadingToastId = toast.loading("Connecting to server...")
+    // if 10 seconds pass and the server is still not available, update the toast
+    setTimeout(() => {
+      toast.update(serverLoadingToastId, {
+        render: "Connecting to server... this may take a while (using free serverless tier)",
+      })
+    }, 4000)
+    isServerAvailable().then((isAvailable) => {
+      if (!isAvailable) {
+        updateLoadingToast(serverLoadingToastId, "Server is not available", "error", false)
+        return
+      }
+      updateLoadingToast(serverLoadingToastId, "Server connected", "success", 2000)
     })
   }, [])
 

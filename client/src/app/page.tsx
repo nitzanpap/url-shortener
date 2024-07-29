@@ -4,6 +4,7 @@ import { generalStrings } from "@/constants/constants"
 import { ShortUrlContext } from "@/hooks/useShortUrlContext"
 import { Button } from "@mantine/core"
 import { useState } from "react"
+import { toast } from "react-toastify"
 import styles from "./page.module.scss"
 
 export default function Home() {
@@ -29,6 +30,7 @@ export default function Home() {
                   className={styles.copyButton}
                   onClick={() => {
                     navigator.clipboard.writeText(shortUrl)
+                    toast.success("Copied to clipboard")
                   }}
                 >
                   Copy to clipboard
