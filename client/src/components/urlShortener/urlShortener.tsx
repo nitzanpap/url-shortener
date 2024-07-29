@@ -10,6 +10,9 @@ import styles from "./urlShortener.module.scss"
 
 export const UrlShortener = () => {
   const [urlInput, setUrlInput] = useState<string>("")
+  const [serverLoadingToastStatus, setServerLoadingToastStatus] = useState<
+    "loading" | "success" | "error"
+  >("loading")
   const [isInputReady, setIsInputReady] = useState(false)
   const { shortUrl, setShortUrl } = useShortUrlContext()
   const inputErrMsg = !isInputReady && urlInput ? "Invalid URL" : ""
@@ -50,10 +53,9 @@ export const UrlShortener = () => {
   }
 
   useEffect(() => {
-    // isServerAvailable is an async function
     const serverLoadingToastId = toast.loading("Connecting to server...")
-    // if 10 seconds pass and the server is still not available, update the toast
     setTimeout(() => {
+      if (!toast.isActive(serverLoadingToastId) || serverLoadingToastStatus !== "loading") return
       toast.update(serverLoadingToastId, {
         render: "Connecting to server... this may take a while (using free serverless tier)",
       })
@@ -61,9 +63,11 @@ export const UrlShortener = () => {
     isServerAvailable().then((isAvailable) => {
       if (!isAvailable) {
         updateLoadingToast(serverLoadingToastId, "Server is not available", "error", false)
+        setServerLoadingToastStatus("error")
         return
       }
       updateLoadingToast(serverLoadingToastId, "Server connected", "success", 2000)
+      setServerLoadingToastStatus("success")
     })
   }, [])
 
