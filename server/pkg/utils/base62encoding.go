@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"crypto/sha256"
 	"fmt"
 	"math/big"
 )
@@ -50,4 +51,11 @@ func indexInBase62Characters(char byte) int {
 		}
 	}
 	return -1
+}
+
+func GenerateTruncatedHashInBase62(str string) string {
+	hash := sha256.Sum256([]byte(str))
+	truncatedHash := hash[:8]
+	base62String := Base62Encode(truncatedHash)
+	return base62String
 }

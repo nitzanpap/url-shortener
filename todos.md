@@ -9,6 +9,7 @@
 - [x] Fix CORS
 - [x] Implement URL shortening
 - [x] Refactor
+- [ ] Improve the url shortening algorithm to a shorter length with collision detection & resolution
 - [ ] Implement authentication and authorization
 - [ ] Implement API endpoints for CRUD operations
 - [ ] Write unit tests for server code
@@ -23,8 +24,8 @@
 - [x] Add a `Clear` button for clearing the input field
 - [x] Add a `Copy` button for copying shortened URLs
 - [x] Add toast notifications
+- [ ] Fix the bug where if the server is down, the toast notification still transitions to the loading state
 - [ ] Fix initial theme flicker
-- [ ] Improve the url validator
 - [ ] Add a cool animation when copying shortened URLs
 - [ ] Add a loading spinner when generating shortened URLs
 - [ ] Implement authentication and authorization
