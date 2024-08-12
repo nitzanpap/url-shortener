@@ -9,7 +9,7 @@
 - [x] Fix CORS
 - [x] Implement URL shortening
 - [x] Refactor
-- [ ] Improve the url shortening algorithm to a shorter length with collision detection & resolution
+- [x] Improve the url shortening algorithm to a shorter length with collision detection & resolution
 - [ ] Implement authentication and authorization
 - [ ] Implement API endpoints for CRUD operations
 - [ ] Write unit tests for server code
