@@ -33,3 +33,12 @@ func getUrlFromDb(obfuscatedShortenedUrl string, db *pgx.Conn) (string, error) {
 	}
 	return url, nil
 }
+
+func getBase62StringFromDb(url string, db *pgx.Conn) (string, error) {
+	var base62String string
+	err := db.QueryRow(context.Background(), `SELECT obfuscated_shortened_url FROM urls WHERE original_url = $1`, url).Scan(&base62String)
+	if err != nil {
+		return "", err
+	}
+	return base62String, nil
+}

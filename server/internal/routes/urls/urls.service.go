@@ -28,12 +28,21 @@ func getUrl(obfuscatedShortenedUrl string, db *pgx.Conn) (string, error) {
 }
 
 func shortenAndObfuscateStringUniquely(url string, db *pgx.Conn) string {
+	// Check if the original URL already exists in the database
+	existingBase62String, err := getBase62StringFromDb(url, db)
+	if err == nil && existingBase62String != "" {
+		// If the URL already exists in the DB, return the associated base62String
+		return existingBase62String
+	}
+
+	// If the URL is new, proceed with generating a new base62String
 	base62String := utils.GenerateTruncatedHashInBase62(url)
 
-	// Check for collision (pseudo-code)
-	for i := 1; checkCollision(base62String, db, url); i++ {
-		// If there is a collision, add numbers incrementally to the URL
-		url += strconv.Itoa(i)
+	// Check for collision
+	originalUrl := url
+	for i := 1; checkCollision(base62String, db, originalUrl); i++ {
+		// Modify the URL with an increment
+		url = originalUrl + strconv.Itoa(i)
 		base62String = utils.GenerateTruncatedHashInBase62(url)
 	}
 
@@ -46,8 +55,8 @@ func checkCollision(base62String string, db *pgx.Conn, url string) bool {
 		errMsg := err.Error()
 		if errMsg == "no rows in result set" {
 			println("No rows in result set")
+			return false
 		}
-		return false
 	}
-	return urlFromDb != url
+	return urlFromDb != "" && urlFromDb != url
 }
