@@ -4,8 +4,6 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"math/big"
-
-	"github.com/nitzanpap/url-shortener/server/pkg"
 )
 
 const base62Characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
@@ -55,9 +53,9 @@ func indexInBase62Characters(char byte) int {
 	return -1
 }
 
-func GenerateTruncatedHashInBase62(str string) string {
+func GenerateTruncatedHashInBase62(str string, numOfBytesToTruncate int) string {
 	hash := sha256.Sum256([]byte(str))
-	truncatedHash := hash[:pkg.NUM_OF_CHARS_IN_URL_ID]
+	truncatedHash := hash[numOfBytesToTruncate:]
 	base62String := Base62Encode(truncatedHash)
 	return base62String
 }

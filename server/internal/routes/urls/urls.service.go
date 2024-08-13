@@ -37,14 +37,14 @@ func shortenAndObfuscateStringUniquely(url string, db *pgx.Conn) string {
 	}
 
 	// If the URL is new, proceed with generating a new base62String
-	base62String := utils.GenerateTruncatedHashInBase62(url)
+	base62String := utils.GenerateTruncatedHashInBase62(url, pkg.NUM_OF_CHARS_IN_URL_ID)
 
 	// Check for collision
 	originalUrl := url
 	for i := 1; checkCollision(base62String, db, originalUrl) && i < pkg.NumOfPossibleUrls; i++ {
 		// Modify the URL with an increment
 		url = originalUrl + strconv.Itoa(i)
-		base62String = utils.GenerateTruncatedHashInBase62(url)
+		base62String = utils.GenerateTruncatedHashInBase62(url, pkg.NUM_OF_CHARS_IN_URL_ID)
 	}
 
 	return base62String
