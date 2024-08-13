@@ -43,6 +43,7 @@ func ConnectToDBPool(dbURL string) (*pgxpool.Pool, error) {
 
 func InitDB(db *pgx.Conn) {
 	createDbTables(db)
+	enableRLS(db)
 	createPreparedStatements(db)
 }
 
@@ -78,6 +79,20 @@ func createDbTables(db *pgx.Conn) {
 	`)
 	if err != nil {
 		log.Fatalf(colors.Error("Unable to create urls table: %v\n"), err)
+	}
+}
+
+func enableRLS(db *pgx.Conn) {
+	// Enable RLS on the Users table
+	_, err := db.Exec(context.Background(), "ALTER TABLE users ENABLE ROW LEVEL SECURITY;")
+	if err != nil {
+		log.Fatalf(colors.Error("Unable to enable RLS on users table: %v\n"), err)
+	}
+
+	// Enable RLS on the URLs table
+	_, err = db.Exec(context.Background(), "ALTER TABLE urls ENABLE ROW LEVEL SECURITY;")
+	if err != nil {
+		log.Fatalf(colors.Error("Unable to enable RLS on urls table: %v\n"), err)
 	}
 }
 
