@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/nitzanpap/url-shortener/server/pkg"
 	"github.com/nitzanpap/url-shortener/server/pkg/utils"
 )
 
@@ -40,7 +41,7 @@ func shortenAndObfuscateStringUniquely(url string, db *pgx.Conn) string {
 
 	// Check for collision
 	originalUrl := url
-	for i := 1; checkCollision(base62String, db, originalUrl); i++ {
+	for i := 1; checkCollision(base62String, db, originalUrl) && i < pkg.NumOfPossibleUrls; i++ {
 		// Modify the URL with an increment
 		url = originalUrl + strconv.Itoa(i)
 		base62String = utils.GenerateTruncatedHashInBase62(url)
