@@ -33,6 +33,7 @@
 - [ ] Implement UI for editing shortened URLs
 - [ ] Implement UI for deleting shortened URLs
 - [ ] Write unit tests for client code
+- [x] Make this a PWA
 
 ## General Tasks
 

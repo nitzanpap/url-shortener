@@ -12,6 +12,7 @@ View the live application [here](https://usni.vercel.app/) 👈.
 
 - **Shorten URLs:** Convert long URLs into manageable short links.
 - **Easy to use:** Simple interface for creating and managing URLs.
+- **PWA:** Easily install the application on Windows, macOS, Android, and iOS. [Click here to see how](https://www.google.com/search?q=how+to+download+pwa)
 
 ## Technologies
 
