@@ -37,3 +37,7 @@ next-env.d.ts
 
 # ignore 'tmp' folder if accidentally created
 tmp/
+
+# Auto Generated PWA files
+**/public/sw.js
+**/public/workbox-*.js

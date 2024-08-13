@@ -30,6 +30,7 @@ What things you need to install the software and how to install them:
 For the server:
 
 - Go: [Download and install Go](https://golang.org/doc/install)
+  - Air: [Install Air](https://github.com/air-verse/air?tab=readme-ov-file#installation) if you want to use live reload
 - PostgreSQL: [Download and install PostgreSQL](https://www.postgresql.org/download/)
 
 For the client:
