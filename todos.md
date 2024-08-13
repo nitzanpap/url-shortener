@@ -34,6 +34,7 @@
 - [ ] Implement UI for deleting shortened URLs
 - [ ] Write unit tests for client code
 - [x] Make this a PWA
+- [ ] Add a GitHub icon & animation that directs to this Github repository
 
 ## General Tasks
 
