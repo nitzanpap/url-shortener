@@ -6,7 +6,7 @@ This is a simple URL shortener project, made for learning purposes.
 
 It is similar to Bit.ly or TinyURL, and allows users to input a long URL and receive a shortened version of it. This makes sharing links easier and helps in tracking and managing URLs.
 
-View the live application [here](https://url-shortener-three-ashy.vercel.app/) 👈.
+View the live application [here](https://usni.vercel.app/) 👈.
 
 ## Features
 
