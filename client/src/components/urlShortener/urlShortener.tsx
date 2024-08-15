@@ -83,6 +83,7 @@ export const UrlShortener = () => {
       return
     }
 
+    setShortUrl("")
     const shortUrlHashResData = await getShortUrlHash(urlInput)
     const generatingUrlToastId = toast.loading("Generating short URL...")
 
