@@ -24,7 +24,7 @@
 - [x] Add a `Clear` button for clearing the input field
 - [x] Add a `Copy` button for copying shortened URLs
 - [x] Add toast notifications
-- [ ] Fix the bug where if the server is down, the toast notification still transitions to the loading state
+- [x] Fix the bug where if the server is down, the toast notification still transitions to the loading state
 - [ ] Fix initial theme flicker
 - [ ] Add a cool animation when copying shortened URLs
 - [ ] Add a loading spinner when generating shortened URLs

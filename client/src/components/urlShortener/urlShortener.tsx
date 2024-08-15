@@ -3,8 +3,8 @@ import { getShortUrlHash, isServerAvailable } from "@/api/serverApi"
 import { useShortUrlContext } from "@/hooks/useShortUrlContext"
 import { errorToast, isValidUrl, updateLoadingToast } from "@/utils/utils"
 import { Button, useMantineTheme } from "@mantine/core"
-import { useEffect, useState } from "react"
-import { toast } from "react-toastify"
+import { useEffect, useRef, useState } from "react"
+import { Id, toast } from "react-toastify"
 import TextInputField from "../TextInputField/TextInputField"
 import styles from "./urlShortener.module.scss"
 
@@ -12,7 +12,9 @@ export const UrlShortener = () => {
   const [urlInput, setUrlInput] = useState<string>("")
   const [serverLoadingToastStatus, setServerLoadingToastStatus] = useState<
     "loading" | "success" | "error"
-  >("loading")
+  >()
+  const [serverLoadingToastId, setServerLoadingToastId] = useState<Id | null>(null)
+  const serverLoadingToastStatusRef = useRef(serverLoadingToastStatus)
   const [isInputReady, setIsInputReady] = useState(false)
   const { shortUrl, setShortUrl } = useShortUrlContext()
   const inputErrMsg = !isInputReady && urlInput ? "Invalid URL" : ""
@@ -53,23 +55,49 @@ export const UrlShortener = () => {
   }
 
   useEffect(() => {
-    const serverLoadingToastId = toast.loading("Connecting to server...")
-    setTimeout(() => {
-      if (!toast.isActive(serverLoadingToastId) || serverLoadingToastStatus !== "loading") return
-      toast.update(serverLoadingToastId, {
-        render: "Connecting to server... this may take a while (using free serverless tier)",
-      })
-    }, 4000)
+    serverLoadingToastStatusRef.current = serverLoadingToastStatus
+  }, [serverLoadingToastStatus])
+
+  useEffect(() => {
+    if (!serverLoadingToastId) {
+      setServerLoadingToastStatus("loading")
+      setServerLoadingToastId(toast.loading("Connecting to server..."))
+      return
+    }
+    if (serverLoadingToastStatus === "loading") {
+      // if the server is still loading after 4 seconds, update the toast to still loading
+      setTimeout(() => {
+        if (serverLoadingToastStatusRef.current !== "loading") return
+        toast.update(serverLoadingToastId, {
+          render: "Connecting to server... this may take a while (using free serverless tier)",
+        })
+      }, 4000)
+    }
     isServerAvailable().then((isAvailable) => {
-      if (!isAvailable) {
-        updateLoadingToast(serverLoadingToastId, "Server is not available", "error", false)
-        setServerLoadingToastStatus("error")
+      if (isAvailable) {
+        setServerLoadingToastStatus("success")
         return
       }
-      updateLoadingToast(serverLoadingToastId, "Server connected", "success", 2000)
-      setServerLoadingToastStatus("success")
+      setServerLoadingToastStatus("error")
     })
-  }, [])
+    if (serverLoadingToastStatus === "success") {
+      toast.update(serverLoadingToastId, {
+        render: "Connected to server",
+        type: "success",
+        autoClose: 2000,
+        isLoading: false,
+      })
+      return
+    }
+    if (serverLoadingToastStatus === "error") {
+      toast.update(serverLoadingToastId, {
+        render: "Failed to connect to server",
+        type: "error",
+        autoClose: 2000,
+        isLoading: false,
+      })
+    }
+  }, [serverLoadingToastId, serverLoadingToastStatus])
 
   return (
     <section className={styles.urlShortenerSection}>
