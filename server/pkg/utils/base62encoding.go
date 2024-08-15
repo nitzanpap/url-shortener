@@ -8,7 +8,7 @@ import (
 
 const base62Characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
-// base62Encode encodes a byte slice into a Base62 string.
+// Base62Encode encodes a byte slice into a Base62 string.
 func Base62Encode(bytes []byte) string {
 	var number big.Int
 	number.SetBytes(bytes) // Set the big int from the byte slice
@@ -25,7 +25,7 @@ func Base62Encode(bytes []byte) string {
 	return result
 }
 
-// base62Decode decodes a Base62 string back into a byte slice.
+// Base62Decode decodes a Base62 string back into a byte slice.
 func Base62Decode(b62 string) ([]byte, error) {
 	var number big.Int
 	base := big.NewInt(62)
