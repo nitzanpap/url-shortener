@@ -51,7 +51,10 @@ export const UrlShortener = () => {
       setServerLoadingToastId(toast.loading("Connecting to server..."))
       return
     }
+
     handleServerCheck()
+    if (serverLoadingToastStatus === "loading") return
+
     const toastConfig = {
       autoClose: 2000,
       isLoading: false,
