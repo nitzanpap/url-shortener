@@ -55,7 +55,7 @@ func indexInBase62Characters(char byte) int {
 
 func GenerateTruncatedHashInBase62(str string, numOfBytesToTruncate int) string {
 	hash := sha256.Sum256([]byte(str))
-	truncatedHash := hash[:numOfBytesToTruncate]
-	base62String := Base62Encode(truncatedHash)
-	return base62String
+	base62String := Base62Encode(hash[:])
+	truncatedBase62Hash := base62String[:numOfBytesToTruncate]
+	return truncatedBase62Hash
 }
