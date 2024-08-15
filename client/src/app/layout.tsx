@@ -50,15 +50,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  console.log(configurations.envVars.serverBaseUrl)
+  // Setting the default color scheme to dark
+  const colorScheme = "dark"
 
   return (
-    <html lang="en">
+    <html lang="en" data-mantine-color-scheme={colorScheme}>
       <head>
-        <ColorSchemeScript />
+        {/* This will set the data-mantine-color-scheme attribute before React hydrates */}
+        <ColorSchemeScript defaultColorScheme={colorScheme} />
       </head>
       <body className={inter.className}>
-        <MantineProvider defaultColorScheme="dark" theme={theme}>
+        <MantineProvider defaultColorScheme={colorScheme} theme={theme}>
           <ToastProvider>{children}</ToastProvider>
         </MantineProvider>
       </body>
