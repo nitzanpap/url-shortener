@@ -25,6 +25,7 @@
 - [x] Add a `Copy` button for copying shortened URLs
 - [x] Add toast notifications
 - [x] Fix the bug where if the server is down, the toast notification still transitions to the loading state
+- [x] Disable `Generate` and `Clear` buttons if the server has not successfully responded yet
 - [ ] Fix initial theme flicker
 - [ ] Add a cool animation when copying shortened URLs
 - [ ] Add a loading spinner when generating shortened URLs
