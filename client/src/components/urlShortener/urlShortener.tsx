@@ -41,7 +41,7 @@ export const UrlShortener = () => {
     const shortUrlHashResData = await getShortUrlHash(urlInput)
     const generatingUrlToastId = toast.loading("Generating short URL...")
     if (!shortUrlHashResData) {
-      errorToast("Failed to generate short URL")
+      updateLoadingToast(generatingUrlToastId, "Failed to generate short URL", "error", 2000)
       return
     }
     toast.update(generatingUrlToastId, {
@@ -117,7 +117,7 @@ export const UrlShortener = () => {
           <Button
             className={styles.urlButton}
             onClick={handleGenerateButtonClicked}
-            disabled={!isInputReady}
+            disabled={!isInputReady || serverLoadingToastStatus !== "success"}
             variant="gradient"
             gradient={{ from: theme.primaryColor, to: theme.colors.blue[4] }}
           >
@@ -129,7 +129,7 @@ export const UrlShortener = () => {
               setUrlInput("")
               setShortUrl("")
             }}
-            disabled={!urlInput && !shortUrl}
+            disabled={(!urlInput && !shortUrl) || serverLoadingToastStatus !== "success"}
             variant="gradient"
             gradient={{ from: theme.colors.red[8], to: theme.colors.red[4] }}
           >
