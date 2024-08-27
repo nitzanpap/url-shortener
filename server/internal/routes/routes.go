@@ -38,6 +38,11 @@ func InitializeRoutes(r *gin.Engine, db *pgx.Conn) {
 				utils.OkHandler(c, &version)
 			})
 
+			v1.GET("/db/health", func(c *gin.Context) {
+				utils.TestDbConnection(db)
+				c.JSON(http.StatusOK, gin.H{"status": "ok", "db": "ok"})
+			})
+
 			urls.UrlGroupHandler(v1, db)
 		}
 	}
