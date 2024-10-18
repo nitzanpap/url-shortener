@@ -1,6 +1,5 @@
-import { configurations } from "@/configs/config"
 import { generalStrings } from "@/constants/constants"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 // All packages except `@mantine/hooks` require styles imports
 import "@mantine/core/styles.css"
@@ -17,14 +16,19 @@ export const metadata: Metadata = {
   generator: "Next.js",
   manifest: "/manifest.json",
   keywords: ["nextjs", "next14", "pwa", "next-pwa"],
-  themeColor: [{ media: "(prefers-color-scheme: dark)", color: "#fff" }],
   authors: [{ name: generalStrings.author.name, url: generalStrings.author.url }],
-  viewport:
-    "minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover",
   icons: [
     { rel: "apple-touch-icon", url: "icons/icon-128x128.png" },
     { rel: "icon", url: "icons/icon-128x128.png" },
   ],
+}
+
+export const viewport: Viewport = {
+  minimumScale: 1,
+  initialScale: 1,
+  width: "device-width",
+  themeColor: [{ media: "(prefers-color-scheme: dark)", color: "#fff" }], // Moved here
+  viewportFit: "cover",
 }
 
 const theme = createTheme({
