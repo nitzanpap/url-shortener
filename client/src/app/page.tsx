@@ -2,13 +2,29 @@
 import { UrlShortener } from "@/components/urlShortener/urlShortener"
 import { generalStrings } from "@/constants/constants"
 import { ShortUrlContext } from "@/hooks/useShortUrlContext"
-import { Button } from "@mantine/core"
-import { useState } from "react"
+import { ActionIcon } from "@mantine/core"
+import { JSX, useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import styles from "./page.module.scss"
+import { ClipboardIcon } from "@/components/icons/ClipboardIcon"
+import { Check } from "@/components/icons/Check"
 
 export default function Home() {
   const [shortUrl, setShortUrl] = useState<string>("")
+  const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    if (copied) {
+      navigator.clipboard.writeText(shortUrl)
+    }
+    const timeout = setTimeout(() => {
+      if (copied) {
+        setCopied(false)
+      }
+    }, 1000)
+
+    return () => clearTimeout(timeout)
+  }, [copied, shortUrl])
   return (
     <section className={styles.pageContainer}>
       <header className={styles.header}></header>
@@ -25,16 +41,17 @@ export default function Home() {
                   <a href={shortUrl} className={styles.shortUrl}>
                     {shortUrl}
                   </a>
+                  <ActionIcon
+                    className={styles.copyButton}
+                    data-copied={copied}
+                    onClick={() => {
+                      setCopied(true)
+                    }}
+                  >
+                    <ClipboardIcon className={styles.clipboardIcon} />
+                    <Check className={styles.checkIcon} />
+                  </ActionIcon>
                 </section>
-                <Button
-                  className={styles.copyButton}
-                  onClick={() => {
-                    navigator.clipboard.writeText(shortUrl)
-                    toast.success("Copied to clipboard")
-                  }}
-                >
-                  Copy to clipboard
-                </Button>
               </>
             )}
           </ShortUrlContext.Provider>

@@ -1,8 +1,6 @@
 .pageContainer {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  flex-flow: column nowrap;
   width: 100%;
   min-height: 100vh;
   color: white;
@@ -45,8 +43,44 @@
       gap: 1rem;
       flex-grow: 1;
       .shortUrlContainer {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
         .shortUrl {
           word-break: break-all;
+        }
+
+        .copyButton {
+          background-color: forestgreen;
+          transition: all 0.2s ease;
+          position: relative;
+
+          &:hover {
+            background: darken(forestgreen, 10%);
+          }
+
+          .checkIcon,
+          .clipboardIcon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+          }
+
+          .checkIcon {
+            opacity: 0;
+          }
+
+          &[data-copied="true"] {
+            .checkIcon {
+              opacity: 1;
+            }
+            .clipboardIcon {
+              opacity: 0;
+            }
+          }
         }
       }
     }
