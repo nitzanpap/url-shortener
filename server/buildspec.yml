@@ -3,6 +3,8 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - echo Location:$PWD
+      - echo Files:$ls
       - cd server
       - echo Logging in to Amazon ECR...
       - export ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -12,6 +14,8 @@ phases:
       - echo IMAGE_TAG=$IMAGE_TAG
   build:
     commands:
+      - echo Location:$PWD
+      - echo Files:$ls
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_NAME:$IMAGE_TAG .
   post_build:
