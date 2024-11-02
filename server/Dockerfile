@@ -14,6 +14,9 @@ COPY . .
 # Install make
 RUN apt update && apt install -y make
 
+# Print the current directory and list the files
+RUN pwd && echo "---" && ls -a && echo "---"
+
 # Build the app
 RUN make build
 
