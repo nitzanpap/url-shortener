@@ -7,12 +7,12 @@ LABEL name="url-shortener-image"
 # Set destination for COPY
 WORKDIR /app
 
+# Install make
+RUN apt update && apt install -y make
+
 # Copy the source code. Note the slash at the end, as explained in
 # https://docs.docker.com/engine/reference/builder/#copy
 COPY . .
-
-# Install make
-RUN apt update && apt install -y make
 
 # Print the current directory and list the files
 RUN pwd && echo "---" && ls -a && echo "---"
