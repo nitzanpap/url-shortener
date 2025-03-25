@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -12,23 +13,57 @@ import (
 )
 
 func GetDatabaseConfig() DatabaseConfig {
+	connectionType := DbConnectionType(os.Getenv("DB_CONNECTION_TYPE"))
+	if connectionType == "" {
+		connectionType = SingleConnection // Default to single connection
+	}
+
 	return DatabaseConfig{
-		Host:     os.Getenv("DB_HOST"),
-		Port:     utils.GetEnvAsInt("DB_PORT"),
-		Username: os.Getenv("DB_USER"),
-		Password: os.Getenv("DB_PASS"),
-		Name:     os.Getenv("DB_NAME"),
-		DB_URL:   utils.BuildPostgresqlDbURL(os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME")),
+		ConnectionType: connectionType,
+		DirectURL:      os.Getenv("DB_DIRECT_URL"),
+		Host:           os.Getenv("DB_HOST"),
+		Port:           utils.GetEnvAsInt("DB_PORT"),
+		Username:       os.Getenv("DB_USER"),
+		Password:       os.Getenv("DB_PASS"),
+		Name:           os.Getenv("DB_NAME"),
+		DB_URL:         utils.BuildPostgresqlDbURL(os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME")),
 	}
 }
 
-// returns either a (pgx.Conn, error) or a (pgxpool.Pool, error)
-func ConnectToDB(dbURL string) (*pgx.Conn, error) {
-	// Connect to the database via pgx for single connection
-	conn, err := pgx.Connect(context.Background(), dbURL)
+// ConnectToDB connects to the database based on the provided configuration
+func ConnectToDB(config DatabaseConfig) (*pgx.Conn, error) {
+	var conn *pgx.Conn
+	var err error
+
+	// Try direct connection first if configured
+	if config.ConnectionType == SingleConnection && config.DirectURL != "" {
+		// Force IPv4 by adding ?prefer_socket=true to the connection string
+		directURL := config.DirectURL
+		if !strings.Contains(directURL, "?") {
+			directURL += "?prefer_socket=true"
+		} else {
+			directURL += "&prefer_socket=true"
+		}
+
+		log.Printf(colors.Info("Attempting direct connection to database...\n"))
+		conn, err = pgx.Connect(context.Background(), directURL)
+		if err == nil {
+			log.Printf(colors.Success("Successfully connected using direct connection\n"))
+			return conn, nil
+		}
+
+		log.Printf(colors.Warning("Direct connection failed: %v\n"), err)
+		log.Printf(colors.Info("Falling back to pooler connection...\n"))
+	}
+
+	// Use pooler connection if direct failed or wasn't configured
+	log.Printf(colors.Info("Attempting to connect via connection pooler...\n"))
+	conn, err = pgx.Connect(context.Background(), config.DB_URL)
 	if err != nil {
 		return nil, err
 	}
+
+	log.Printf(colors.Success("Successfully connected using pooler connection\n"))
 	return conn, nil
 }
 

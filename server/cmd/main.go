@@ -20,7 +20,7 @@ func main() {
 
 	gin.SetMode(serverconfigs.GetGinMode(config))
 
-	db, err := dbconfigs.ConnectToDB(config.Database.DB_URL)
+	db, err := dbconfigs.ConnectToDB(config.Database)
 	if err != nil {
 		log.Fatalf(colors.Error("could not connect to database: %s\n"), err)
 	}

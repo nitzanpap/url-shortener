@@ -1,18 +1,20 @@
 package dbconfigs
 
 type DatabaseConfig struct {
-	Host     string
-	Port     int
-	Username string
-	Password string
-	Name     string
-	DB_URL   string
+	ConnectionType DbConnectionType
+	DirectURL      string
+	Host           string
+	Port           int
+	Username       string
+	Password       string
+	Name           string
+	DB_URL         string
 }
 
 type DbConnectionType string
 
 const (
-	SingleConnection DbConnectionType = "single"
+	SingleConnection DbConnectionType = "direct"
 	PoolConnection   DbConnectionType = "pool"
 )
 

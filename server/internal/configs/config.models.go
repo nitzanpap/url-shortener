@@ -11,6 +11,7 @@ type Config struct {
 type Environment string
 
 const (
+	Local       Environment = "local"
 	Development Environment = "development"
 	Production  Environment = "production"
 )
