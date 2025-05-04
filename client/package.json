@@ -13,17 +13,17 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mantine/core": "^7.10.2",
+    "@mantine/core": "^7.17.3",
     "@mantine/hooks": "^7.17.3",
     "@reduxjs/toolkit": "^2.2.5",
     "axios": "^1.8.2",
-    "next": "^14.2.26",
+    "next": "^14.2.28",
     "next-pwa": "^5.6.0",
     "react": "^18",
     "react-dom": "^18",
     "react-redux": "^9.1.2",
     "react-toastify": "^10.0.5",
-    "sass": "^1.77.5"
+    "sass": "^1.86.2"
   },
   "devDependencies": {
     "@types/node": "^20",
