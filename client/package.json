@@ -13,7 +13,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mantine/core": "^7.17.3",
+    "@mantine/core": "^7.17.4",
     "@mantine/hooks": "^7.17.3",
     "@reduxjs/toolkit": "^2.7.0",
     "axios": "^1.8.2",
