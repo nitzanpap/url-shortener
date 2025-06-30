@@ -33,6 +33,29 @@
   font-size: 0.875rem;
 }
 
+.success {
+  padding: 0.75rem;
+  border-radius: 4px;
+  background: #d4edda;
+  color: #155724;
+  font-size: 0.875rem;
+  border: 1px solid #c3e6cb;
+}
+
+.linkButton {
+  background: none;
+  border: none;
+  color: var(--primary);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
 .inputGroup {
   display: flex;
   flex-direction: column;

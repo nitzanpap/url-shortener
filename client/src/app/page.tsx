@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import styles from "./page.module.scss"
 import { ClipboardIcon } from "@/components/icons/ClipboardIcon"
 import { Check } from "@/components/icons/Check"
+import { Navigation } from "@/components/Navigation"
 
 export default function Home() {
   const [shortUrl, setShortUrl] = useState<string>("")
@@ -26,7 +27,9 @@ export default function Home() {
   }, [copied, shortUrl])
   return (
     <section className={styles.pageContainer}>
-      <header className={styles.header}></header>
+      <header className={styles.header}>
+        <Navigation />
+      </header>
       <main className={styles.main}>
         <section className={styles.titleContainer}>
           <h1 className={styles.title}>{generalStrings.title}</h1>

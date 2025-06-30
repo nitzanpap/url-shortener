@@ -1,0 +1,41 @@
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: var(--background);
+  border-bottom: 1px solid var(--border);
+}
+
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  
+  span {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+}
+
+.authLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.authButton {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--primary);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: var(--primary);
+    color: white;
+  }
+}

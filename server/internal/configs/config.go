@@ -28,6 +28,11 @@ func LoadConfig() *Config {
 		Database:     dbconfigs.GetDatabaseConfig(),
 		Environment:  getEnvironment(),
 		ClientOrigin: os.Getenv("CLIENT_ORIGIN"),
+		Supabase: SupabaseConfig{
+			URL:       os.Getenv("SUPABASE_URL"),
+			AnonKey:   os.Getenv("SUPABASE_ANON_KEY"),
+			JWTSecret: os.Getenv("SUPABASE_JWT_SECRET"),
+		},
 	}
 
 	// if config.Environment is not one of the predefined values, throw an error

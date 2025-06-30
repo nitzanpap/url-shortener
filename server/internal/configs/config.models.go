@@ -7,6 +7,13 @@ type Config struct {
 	Database     dbconfigs.DatabaseConfig
 	Environment  Environment
 	ClientOrigin string
+	Supabase     SupabaseConfig
+}
+
+type SupabaseConfig struct {
+	URL       string
+	AnonKey   string
+	JWTSecret string
 }
 type Environment string
 
