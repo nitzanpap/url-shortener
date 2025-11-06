@@ -7,6 +7,7 @@ import "./global.scss"
 
 import ToastProvider from "@/components/ToastProvider/ToastProvider"
 import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core"
+import { AuthProvider } from "@/contexts/AuthContext"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -65,7 +66,9 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <MantineProvider defaultColorScheme={colorScheme} theme={theme}>
-          <ToastProvider>{children}</ToastProvider>
+          <AuthProvider>
+            <ToastProvider>{children}</ToastProvider>
+          </AuthProvider>
         </MantineProvider>
       </body>
     </html>

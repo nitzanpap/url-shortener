@@ -1,22 +1,34 @@
 import Link from 'next/link'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/contexts/AuthContext'
 import styles from './Navigation.module.scss'
 
 export function Navigation() {
-  const { isAuthenticated, logout } = useAuth()
+  const { user, signOut } = useAuth()
+
+  const handleLogout = async () => {
+    await signOut()
+  }
 
   return (
     <nav className={styles.nav}>
       {/* ... existing navigation items ... */}
       
-      {isAuthenticated ? (
-        <button onClick={logout} className={styles.authButton}>
-          Logout
-        </button>
+      {user ? (
+        <div className={styles.userSection}>
+          <span>Welcome, {user.email}</span>
+          <button onClick={handleLogout} className={styles.authButton}>
+            Logout
+          </button>
+        </div>
       ) : (
-        <Link href="/login" className={styles.authButton}>
-          Login
-        </Link>
+        <div className={styles.authLinks}>
+          <Link href="/login" className={styles.authButton}>
+            Login
+          </Link>
+          <Link href="/register" className={styles.authButton}>
+            Register
+          </Link>
+        </div>
       )}
     </nav>
   )

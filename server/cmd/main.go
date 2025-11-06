@@ -34,7 +34,7 @@ func main() {
 
 	// Create a Gin router instance
 	router := serverconfigs.SetupGinServer(config)
-	routes.InitializeRoutes(router, db)
+	routes.InitializeRoutes(router, db, config)
 
 	// Starting the server
 	log.Printf(colors.Success("Starting server on: http://localhost:%d\n"), config.Port)
