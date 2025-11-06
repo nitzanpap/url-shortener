@@ -3,6 +3,8 @@ package urls
 import (
 	"log"
 	"net/http"
+	"net/url"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
@@ -56,12 +58,19 @@ func UrlGroupHandler(r *gin.RouterGroup, db *pgx.Conn) {
 	}
 }
 
-func isUrlValid(url string) bool {
-	resp, err := http.Get(url)
+func isUrlValid(rawURL string) bool {
+	trimmed := strings.TrimSpace(rawURL)
+	if trimmed == "" {
+		return false
+	}
+	parsed, err := url.ParseRequestURI(trimmed)
 	if err != nil {
 		return false
 	}
-	if resp.StatusCode != http.StatusOK {
+	if parsed.Scheme != "http" && parsed.Scheme != "https" {
+		return false
+	}
+	if parsed.Host == "" {
 		return false
 	}
 	return true
