@@ -10,6 +10,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "format": "prettier --write .",
     "lint": "next lint"
   },
   "dependencies": {
@@ -29,7 +30,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
+    "eslint": "^9",
     "eslint-config-next": "^16.0.10",
     "postcss": "^8.4.38",
     "postcss-preset-mantine": "^1.15.0",
