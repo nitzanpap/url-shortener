@@ -49,7 +49,7 @@ func LoadConfig() *Config {
 
 func getEnvironment() Environment {
 	environment := Environment(os.Getenv("ENV"))
-	for _, env := range []Environment{Development, Production} {
+	for _, env := range []Environment{Local, Development, Production} {
 		if environment == env {
 			return environment
 		}
@@ -67,7 +67,7 @@ func printOutConfig(config *Config) {
 }
 
 func validateEnvironmentVar(config *Config) {
-	for _, env := range []Environment{Development, Production} {
+	for _, env := range []Environment{Local, Development, Production} {
 		if config.Environment == env {
 			return
 		}
