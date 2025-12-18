@@ -132,20 +132,20 @@ func enableRLS(db *pgx.Conn) {
 }
 
 var PreparedStatements = preparedStatementsStruct{
-	CreateUserRow:    "createUserRow",
-	GetUserRow:       "getUserRow",
-	CreateURLRow:     "createUrlRow",
-	GetURLRow:        "getUrlRow",
-	GetURLsByUserID:  "getUrlsByUserId",
+	CreateUserRow:   "createUserRow",
+	GetUserRow:      "getUserRow",
+	CreateURLRow:    "createUrlRow",
+	GetURLRow:       "getUrlRow",
+	GetURLsByUserID: "getUrlsByUserId",
 }
 
 func createPreparedStatements(db *pgx.Conn) {
 	preparedStatements := map[string]string{
-		PreparedStatements.CreateUserRow:    `INSERT INTO users (username, hashed_password) VALUES ($1, $2)`,
-		PreparedStatements.GetUserRow:       `SELECT user_id, username, hashed_password FROM users WHERE username = $1`,
-		PreparedStatements.CreateURLRow:     `INSERT INTO urls (original_url, obfuscated_shortened_url, user_id) VALUES ($1, $2, $3)`,
-		PreparedStatements.GetURLRow:        `SELECT id, user_id, original_url, obfuscated_shortened_url FROM urls WHERE obfuscated_shortened_url = $1`,
-		PreparedStatements.GetURLsByUserID:  `SELECT id, user_id, original_url, obfuscated_shortened_url FROM urls WHERE user_id = $1`,
+		PreparedStatements.CreateUserRow:   `INSERT INTO users (username, hashed_password) VALUES ($1, $2)`,
+		PreparedStatements.GetUserRow:      `SELECT user_id, username, hashed_password FROM users WHERE username = $1`,
+		PreparedStatements.CreateURLRow:    `INSERT INTO urls (original_url, obfuscated_shortened_url, user_id) VALUES ($1, $2, $3)`,
+		PreparedStatements.GetURLRow:       `SELECT id, user_id, original_url, obfuscated_shortened_url FROM urls WHERE obfuscated_shortened_url = $1`,
+		PreparedStatements.GetURLsByUserID: `SELECT id, user_id, original_url, obfuscated_shortened_url FROM urls WHERE user_id = $1`,
 	}
 
 	_, err := db.Exec(context.Background(), "DEALLOCATE ALL")
