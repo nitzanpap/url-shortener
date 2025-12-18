@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"reflect"
+	"slices"
 	"strings"
 
 	"github.com/joho/godotenv"
@@ -49,28 +50,24 @@ func LoadConfig() *Config {
 
 func getEnvironment() Environment {
 	environment := Environment(os.Getenv("ENV"))
-	for _, env := range []Environment{Local, Development, Production} {
-		if environment == env {
-			return environment
-		}
+	if slices.Contains([]Environment{Local, Development, Production}, environment) {
+		return environment
 	}
 	log.Fatalf(colors.Error("Error loading configuration - Invalid environment value: %s\n"), environment)
 	return ""
 }
 
 func printOutConfig(config *Config) {
-	configPrettyJsonStr, err := utils.PrettyStruct(*config)
+	configPrettyJSONStr, err := utils.PrettyStruct(*config)
 	if err != nil {
 		log.Fatalf(colors.Error("Error pretty printing config: %v"), err)
 	}
-	log.Printf(colors.Info("Config: %s\n"), configPrettyJsonStr)
+	log.Printf(colors.Info("Config: %s\n"), configPrettyJSONStr)
 }
 
 func validateEnvironmentVar(config *Config) {
-	for _, env := range []Environment{Local, Development, Production} {
-		if config.Environment == env {
-			return
-		}
+	if slices.Contains([]Environment{Local, Development, Production}, config.Environment) {
+		return
 	}
 	log.Fatalf(colors.Error("Error loading configuration - Invalid environment value: %s\n"), config.Environment)
 }

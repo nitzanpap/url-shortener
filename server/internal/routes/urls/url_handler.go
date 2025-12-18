@@ -12,10 +12,10 @@ func NewHandler(service *Service) Handler {
 	}
 }
 
-func (h *handler) ShortUrlHandler(c *gin.Context) {
+func (h *handler) ShortURLHandler(c *gin.Context) {
 	// Implementation here
 }
 
-func (h *handler) UrlGroupHandler(c *gin.Context) {
+func (h *handler) URLGroupHandler(c *gin.Context) {
 	// Implementation here
 }

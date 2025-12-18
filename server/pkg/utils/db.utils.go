@@ -10,11 +10,11 @@ import (
 	"github.com/nitzanpap/url-shortener/server/pkg/colors"
 )
 
-func BuildPostgresqlDbURL(host, port, user, pass, name string) string {
+func BuildPostgresqlDBURL(host, port, user, pass, name string) string {
 	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s", user, pass, host, port, name)
 }
 
-func TestDbConnection(db *pgx.Conn) {
+func TestDBConnection(db *pgx.Conn) {
 	// Test the connection to the database and print the response
 	if err := db.Ping(context.Background()); err != nil {
 		log.Fatalf(colors.Error("could not ping database: %s\n"), err)
@@ -22,7 +22,7 @@ func TestDbConnection(db *pgx.Conn) {
 	log.Print(colors.Success("Successfully connected to database\n"))
 }
 
-func TestDbPoolConnection(db *pgxpool.Pool) {
+func TestDBPoolConnection(db *pgxpool.Pool) {
 	// Test the connection to the database and print the response
 	if err := db.Ping(context.Background()); err != nil {
 		log.Fatalf(colors.Error("could not ping database: %s\n"), err)

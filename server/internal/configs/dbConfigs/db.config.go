@@ -13,7 +13,7 @@ import (
 )
 
 func GetDatabaseConfig() DatabaseConfig {
-	connectionType := DbConnectionType(os.Getenv("DB_CONNECTION_TYPE"))
+	connectionType := DBConnectionType(os.Getenv("DB_CONNECTION_TYPE"))
 	if connectionType == "" {
 		connectionType = SingleConnection // Default to single connection
 	}
@@ -26,7 +26,7 @@ func GetDatabaseConfig() DatabaseConfig {
 		Username:       os.Getenv("DB_USER"),
 		Password:       os.Getenv("DB_PASS"),
 		Name:           os.Getenv("DB_NAME"),
-		DB_URL:         utils.BuildPostgresqlDbURL(os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME")),
+		DBURL:          utils.BuildPostgresqlDBURL(os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME")),
 	}
 }
 
@@ -58,7 +58,7 @@ func ConnectToDB(config DatabaseConfig) (*pgx.Conn, error) {
 
 	// Use pooler connection if direct failed or wasn't configured
 	log.Print(colors.Info("Attempting to connect via connection pooler...\n"))
-	conn, err = pgx.Connect(context.Background(), config.DB_URL)
+	conn, err = pgx.Connect(context.Background(), config.DBURL)
 	if err != nil {
 		return nil, err
 	}
@@ -77,12 +77,12 @@ func ConnectToDBPool(dbURL string) (*pgxpool.Pool, error) {
 }
 
 func InitDB(db *pgx.Conn) {
-	createDbTables(db)
+	createDBTables(db)
 	enableRLS(db)
 	createPreparedStatements(db)
 }
 
-func createDbTables(db *pgx.Conn) {
+func createDBTables(db *pgx.Conn) {
 	// Create the Users table if it does not exist
 	_, err := db.Exec(
 		context.Background(),
@@ -132,20 +132,20 @@ func enableRLS(db *pgx.Conn) {
 }
 
 var PreparedStatements = preparedStatementsStruct{
-	CreateUserRow:   "createUserRow",
-	GetUserRow:      "getUserRow",
-	CreateUrlRow:    "createUrlRow",
-	GetUrlRow:       "getUrlRow",
-	GetUrlsByUserId: "getUrlsByUserId",
+	CreateUserRow:    "createUserRow",
+	GetUserRow:       "getUserRow",
+	CreateURLRow:     "createUrlRow",
+	GetURLRow:        "getUrlRow",
+	GetURLsByUserID:  "getUrlsByUserId",
 }
 
 func createPreparedStatements(db *pgx.Conn) {
 	preparedStatements := map[string]string{
-		PreparedStatements.CreateUserRow:   `INSERT INTO users (username, hashed_password) VALUES ($1, $2)`,
-		PreparedStatements.GetUserRow:      `SELECT user_id, username, hashed_password FROM users WHERE username = $1`,
-		PreparedStatements.CreateUrlRow:    `INSERT INTO urls (original_url, obfuscated_shortened_url, user_id) VALUES ($1, $2, $3)`,
-		PreparedStatements.GetUrlRow:       `SELECT id, user_id, original_url, obfuscated_shortened_url FROM urls WHERE obfuscated_shortened_url = $1`,
-		PreparedStatements.GetUrlsByUserId: `SELECT id, user_id, original_url, obfuscated_shortened_url FROM urls WHERE user_id = $1`,
+		PreparedStatements.CreateUserRow:    `INSERT INTO users (username, hashed_password) VALUES ($1, $2)`,
+		PreparedStatements.GetUserRow:       `SELECT user_id, username, hashed_password FROM users WHERE username = $1`,
+		PreparedStatements.CreateURLRow:     `INSERT INTO urls (original_url, obfuscated_shortened_url, user_id) VALUES ($1, $2, $3)`,
+		PreparedStatements.GetURLRow:        `SELECT id, user_id, original_url, obfuscated_shortened_url FROM urls WHERE obfuscated_shortened_url = $1`,
+		PreparedStatements.GetURLsByUserID:  `SELECT id, user_id, original_url, obfuscated_shortened_url FROM urls WHERE user_id = $1`,
 	}
 
 	_, err := db.Exec(context.Background(), "DEALLOCATE ALL")

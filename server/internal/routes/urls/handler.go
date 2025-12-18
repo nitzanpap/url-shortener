@@ -6,6 +6,6 @@ import "github.com/gin-gonic/gin"
 type Handler interface {
 	// Add methods that your URL handler needs to implement
 	// For example:
-	ShortUrlHandler(c *gin.Context)
-	UrlGroupHandler(c *gin.Context)
+	ShortURLHandler(c *gin.Context)
+	URLGroupHandler(c *gin.Context)
 }

@@ -1,23 +1,23 @@
 package dbconfigs
 
 type DatabaseConfig struct {
-	ConnectionType DbConnectionType
+	ConnectionType DBConnectionType
 	DirectURL      string
 	Host           string
 	Port           int
 	Username       string
 	Password       string
 	Name           string
-	DB_URL         string
+	DBURL          string
 }
 
-type DbConnectionType string
+type DBConnectionType string
 
 const (
-	SingleConnection DbConnectionType = "direct"
-	PoolConnection   DbConnectionType = "pool"
+	SingleConnection DBConnectionType = "direct"
+	PoolConnection   DBConnectionType = "pool"
 )
 
 type preparedStatementsStruct struct {
-	CreateUserRow, GetUserRow, CreateUrlRow, GetUrlRow, GetUrlsByUserId string
+	CreateUserRow, GetUserRow, CreateURLRow, GetURLRow, GetURLsByUserID string
 }

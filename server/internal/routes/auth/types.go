@@ -2,7 +2,7 @@ package auth
 
 import "errors"
 
-// Request/Response types
+// Credentials represents the user authentication request payload.
 type Credentials struct {
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required,min=6"`

@@ -8,20 +8,20 @@ import (
 	"github.com/nitzanpap/url-shortener/server/pkg/utils"
 )
 
-func saveUrl(url string, db *pgx.Conn) (string, error) {
-	obfuscatedShortenedUrl := shortenAndObfuscateStringUniquely(url, db)
+func saveURL(url string, db *pgx.Conn) (string, error) {
+	obfuscatedShortenedURL := shortenAndObfuscateStringUniquely(url, db)
 
-	// save the URL and the obfuscatedShortenedUrl in the database
-	err := saveUrlInDb(url, obfuscatedShortenedUrl, db)
+	// save the URL and the obfuscatedShortenedURL in the database
+	err := saveURLInDB(url, obfuscatedShortenedURL, db)
 	if err != nil {
 		return "", err
 	}
-	return obfuscatedShortenedUrl, nil
+	return obfuscatedShortenedURL, nil
 }
 
-func getUrl(obfuscatedShortenedUrl string, db *pgx.Conn) (string, error) {
-	// get the URL from the database using the obfuscatedShortenedUrl
-	url, err := getUrlFromDb(obfuscatedShortenedUrl, db)
+func getURL(obfuscatedShortenedURL string, db *pgx.Conn) (string, error) {
+	// get the URL from the database using the obfuscatedShortenedURL
+	url, err := getURLFromDB(obfuscatedShortenedURL, db)
 	if err != nil {
 		return "", err
 	}
@@ -30,28 +30,28 @@ func getUrl(obfuscatedShortenedUrl string, db *pgx.Conn) (string, error) {
 
 func shortenAndObfuscateStringUniquely(url string, db *pgx.Conn) string {
 	// Check if the original URL already exists in the database
-	existingBase62String, err := getBase62StringFromDb(url, db)
+	existingBase62String, err := getBase62StringFromDB(url, db)
 	if err == nil && existingBase62String != "" {
 		// If the URL already exists in the DB, return the associated base62String
 		return existingBase62String
 	}
 
 	// If the URL is new, proceed with generating a new base62String
-	base62String := utils.GenerateTruncatedHashInBase62(url, pkg.NUM_OF_CHARS_IN_URL_ID)
+	base62String := utils.GenerateTruncatedHashInBase62(url, pkg.NumOfCharsInURLID)
 
 	// Check for collision
-	originalUrl := url
-	for i := 1; checkCollision(base62String, db, originalUrl) && i < pkg.NumOfPossibleUrls; i++ {
+	originalURL := url
+	for i := 1; checkCollision(base62String, db, originalURL) && i < pkg.NumOfPossibleUrls; i++ {
 		// Modify the URL with an increment
-		url = originalUrl + strconv.Itoa(i)
-		base62String = utils.GenerateTruncatedHashInBase62(url, pkg.NUM_OF_CHARS_IN_URL_ID)
+		url = originalURL + strconv.Itoa(i)
+		base62String = utils.GenerateTruncatedHashInBase62(url, pkg.NumOfCharsInURLID)
 	}
 
 	return base62String
 }
 
 func checkCollision(base62String string, db *pgx.Conn, url string) bool {
-	urlFromDb, err := getUrlFromDb(base62String, db)
+	urlFromDB, err := getURLFromDB(base62String, db)
 	if err != nil {
 		errMsg := err.Error()
 		if errMsg == "no rows in result set" {
@@ -59,5 +59,5 @@ func checkCollision(base62String string, db *pgx.Conn, url string) bool {
 			return false
 		}
 	}
-	return urlFromDb != "" && urlFromDb != url
+	return urlFromDB != "" && urlFromDB != url
 }

@@ -39,9 +39,9 @@ func InitializeRoutes(r *gin.Engine, db *pgx.Conn) {
 		utils.OkHandler(c, nil)
 	})
 
-	getUrlFromObfuscatedShortenedUrl := r.Group("/s")
+	getURLFromObfuscatedShortenedURL := r.Group("/s")
 	{
-		urls.ShortUrlHandler(getUrlFromObfuscatedShortenedUrl, db)
+		urls.ShortURLHandler(getURLFromObfuscatedShortenedURL, db)
 	}
 
 	api := r.Group("/api")
@@ -63,11 +63,11 @@ func InitializeRoutes(r *gin.Engine, db *pgx.Conn) {
 			})
 
 			v1.GET("/db/health", func(c *gin.Context) {
-				utils.TestDbConnection(db)
+				utils.TestDBConnection(db)
 				c.JSON(http.StatusOK, gin.H{"status": "ok", "db": "ok"})
 			})
 
-			urls.UrlGroupHandler(v1, db)
+			urls.URLGroupHandler(v1, db)
 		}
 	}
 

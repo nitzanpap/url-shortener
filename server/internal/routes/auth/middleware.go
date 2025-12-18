@@ -14,7 +14,7 @@ func NewAuthMiddleware(service Service) *AuthMiddleware {
 	}
 }
 
-// Middleware handler function
+// RequireAuth is a middleware handler function that validates JWT tokens.
 func (m *AuthMiddleware) RequireAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")

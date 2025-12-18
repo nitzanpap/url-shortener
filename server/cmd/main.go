@@ -27,7 +27,7 @@ func main() {
 	defer db.Close(context.Background())
 
 	// Test the connection to the database
-	utils.TestDbConnection(db)
+	utils.TestDBConnection(db)
 
 	dbconfigs.InitDB(db)
 	log.Print(colors.Success("Successfully initialized database\n"))

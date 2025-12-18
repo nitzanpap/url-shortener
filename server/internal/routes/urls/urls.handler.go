@@ -11,25 +11,25 @@ import (
 	"github.com/nitzanpap/url-shortener/server/pkg/colors"
 )
 
-// this route is: POST /h/:obfuscatedShortenedUrl, and it returns the original URL
-func ShortUrlHandler(r *gin.RouterGroup, db *pgx.Conn) {
+// ShortURLHandler handles the route POST /h/:obfuscatedShortenedUrl, and returns the original URL.
+func ShortURLHandler(r *gin.RouterGroup, db *pgx.Conn) {
 	r.GET("/:obfuscatedShortenedUrl", func(c *gin.Context) {
-		obfuscatedShortenedUrl := c.Param("obfuscatedShortenedUrl")
-		actualUrl, err := getUrl(obfuscatedShortenedUrl, db)
+		obfuscatedShortenedURL := c.Param("obfuscatedShortenedUrl")
+		actualURL, err := getURL(obfuscatedShortenedURL, db)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get URL"})
 			return
 		}
-		if !isUrlValid(actualUrl) {
+		if !isURLValid(actualURL) {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid URL"})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"originalUrl": actualUrl})
+		c.JSON(http.StatusOK, gin.H{"originalUrl": actualURL})
 	})
 }
 
-// This route is: GET /api/v1/url/:obfuscatedShortenedUrl
-func UrlGroupHandler(r *gin.RouterGroup, db *pgx.Conn) {
+// URLGroupHandler handles the route GET /api/v1/url/:obfuscatedShortenedUrl.
+func URLGroupHandler(r *gin.RouterGroup, db *pgx.Conn) {
 	url := r.Group("/url")
 	{
 		// This route receives a POST request with a JSON body that contains a URL, and returns a shortened URL.
@@ -42,23 +42,23 @@ func UrlGroupHandler(r *gin.RouterGroup, db *pgx.Conn) {
 				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 				return
 			}
-			if !isUrlValid(request.URL) {
+			if !isURLValid(request.URL) {
 				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid URL"})
 				return
 			}
-			obfuscatedShortenedUrl, err := saveUrl(request.URL, db)
+			obfuscatedShortenedURL, err := saveURL(request.URL, db)
 			if err != nil {
 				log.Fatalf(colors.Error("Failed to save URL: %s"), err)
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate short URL"})
 				return
 			}
 
-			c.JSON(http.StatusCreated, gin.H{"obfuscatedShortenedUrl": obfuscatedShortenedUrl})
+			c.JSON(http.StatusCreated, gin.H{"obfuscatedShortenedUrl": obfuscatedShortenedURL})
 		})
 	}
 }
 
-func isUrlValid(rawURL string) bool {
+func isURLValid(rawURL string) bool {
 	trimmed := strings.TrimSpace(rawURL)
 	if trimmed == "" {
 		return false
