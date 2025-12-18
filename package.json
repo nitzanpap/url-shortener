@@ -1,0 +1,30 @@
+{
+  "name": "url-shortener",
+  "version": "1.0.0",
+  "description": "This is a simple URL shortener project, made for learning purposes.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev:server": "cd server && make run/live",
+    "dev:client": "cd client && npm run dev",
+    "dev": "concurrently --kill-others-on-fail --restart-tries 0 --names \"server,client\" --prefix \"[{name}]\" -c auto \"npm run dev:server\" \"npm run dev:client\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nitzanpap/url-shortener.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nitzanpap/url-shortener/issues"
+  },
+  "homepage": "https://github.com/nitzanpap/url-shortener#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
