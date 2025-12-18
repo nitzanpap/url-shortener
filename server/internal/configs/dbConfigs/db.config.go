@@ -45,25 +45,25 @@ func ConnectToDB(config DatabaseConfig) (*pgx.Conn, error) {
 			directURL += "&prefer_socket=true"
 		}
 
-		log.Printf(colors.Info("Attempting direct connection to database...\n"))
+		log.Print(colors.Info("Attempting direct connection to database...\n"))
 		conn, err = pgx.Connect(context.Background(), directURL)
 		if err == nil {
-			log.Printf(colors.Success("Successfully connected using direct connection\n"))
+			log.Print(colors.Success("Successfully connected using direct connection\n"))
 			return conn, nil
 		}
 
-		log.Printf(colors.Warning("Direct connection failed: %v\n"), err)
-		log.Printf(colors.Info("Falling back to pooler connection...\n"))
+		log.Printf("%s%v\n", colors.Warning("Direct connection failed: "), err)
+		log.Print(colors.Info("Falling back to pooler connection...\n"))
 	}
 
 	// Use pooler connection if direct failed or wasn't configured
-	log.Printf(colors.Info("Attempting to connect via connection pooler...\n"))
+	log.Print(colors.Info("Attempting to connect via connection pooler...\n"))
 	conn, err = pgx.Connect(context.Background(), config.DB_URL)
 	if err != nil {
 		return nil, err
 	}
 
-	log.Printf(colors.Success("Successfully connected using pooler connection\n"))
+	log.Print(colors.Success("Successfully connected using pooler connection\n"))
 	return conn, nil
 }
 
