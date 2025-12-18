@@ -55,6 +55,24 @@ A step by step series of examples that tell you how to get a development env run
     cd url-shortener
     ```
 
+3. Install root dependencies:
+
+    ```bash
+    npm install
+    ```
+
+### Running Both Server and Client Together
+
+The easiest way to run both the server and client simultaneously is using the root-level npm script:
+
+```bash
+npm run dev
+```
+
+This uses `concurrently` to run both the server (with live reload) and the client development server in a single terminal with labeled output.
+
+Alternatively, you can run the server and client separately in different terminals as described below.
+
 #### Server Setup
 
 - **Note:** If you are using VS Code, you can use the `Go` extension to install the necessary tools and dependencies.
