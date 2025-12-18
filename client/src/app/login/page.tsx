@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { LoginForm } from "@/components/LoginForm";
-import styles from "./page.module.scss";
+import { LoginForm } from "@/components/LoginForm"
+import styles from "./page.module.scss"
 
 export default function LoginPage() {
   return (
@@ -11,5 +11,5 @@ export default function LoginPage() {
         <LoginForm />
       </div>
     </main>
-  );
+  )
 }

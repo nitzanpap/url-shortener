@@ -11,7 +11,7 @@
     "build": "next build",
     "start": "next start",
     "format": "prettier --write .",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@mantine/core": "^7.17.8",
@@ -27,6 +27,7 @@
     "sass": "^1.93.2"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.3",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -35,6 +36,7 @@
     "postcss": "^8.4.38",
     "postcss-preset-mantine": "^1.15.0",
     "postcss-simple-vars": "^7.0.1",
+    "prettier": "^3.7.4",
     "typescript": "^5"
   }
 }

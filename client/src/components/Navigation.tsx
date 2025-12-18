@@ -1,9 +1,9 @@
-import Link from "next/link";
-import { useAuth } from "@/hooks/useAuth";
-import styles from "./Navigation.module.scss";
+import Link from "next/link"
+import { useAuth } from "@/hooks/useAuth"
+import styles from "./Navigation.module.scss"
 
 export function Navigation() {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth()
 
   return (
     <nav className={styles.nav}>
@@ -19,5 +19,5 @@ export function Navigation() {
         </Link>
       )}
     </nav>
-  );
+  )
 }

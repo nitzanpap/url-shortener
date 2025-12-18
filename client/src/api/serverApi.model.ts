@@ -1,7 +1,7 @@
 export interface IGetShortUrlHashResponse {
-  obfuscatedShortenedUrl: string;
+  obfuscatedShortenedUrl: string
 }
 
 export interface IGetOriginalUrlResponse {
-  originalUrl: string;
+  originalUrl: string
 }

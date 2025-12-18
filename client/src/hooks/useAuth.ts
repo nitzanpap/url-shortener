@@ -1,41 +1,41 @@
-import { useState, useCallback } from "react";
-import { authApi, Credentials } from "@/api/auth";
-import { auth } from "@/utils/auth";
+import { useState, useCallback } from "react"
+import { authApi, Credentials } from "@/api/auth"
+import { auth } from "@/utils/auth"
 
 export function useAuth() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const register = useCallback(async (credentials: Credentials) => {
-    setIsLoading(true);
-    setError(null);
+    setIsLoading(true)
+    setError(null)
     try {
-      await authApi.register(credentials);
+      await authApi.register(credentials)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Registration failed");
-      throw err;
+      setError(err instanceof Error ? err.message : "Registration failed")
+      throw err
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  }, []);
+  }, [])
 
   const login = useCallback(async (credentials: Credentials) => {
-    setIsLoading(true);
-    setError(null);
+    setIsLoading(true)
+    setError(null)
     try {
-      const { token } = await authApi.login(credentials);
-      auth.setToken(token);
+      const { token } = await authApi.login(credentials)
+      auth.setToken(token)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed");
-      throw err;
+      setError(err instanceof Error ? err.message : "Login failed")
+      throw err
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  }, []);
+  }, [])
 
   const logout = useCallback(() => {
-    auth.removeToken();
-  }, []);
+    auth.removeToken()
+  }, [])
 
   return {
     isAuthenticated: auth.isAuthenticated(),
@@ -44,5 +44,5 @@ export function useAuth() {
     register,
     login,
     logout,
-  };
+  }
 }

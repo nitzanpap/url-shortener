@@ -1,14 +1,14 @@
-import { generalStrings } from "@/constants/constants";
-import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { generalStrings } from "@/constants/constants"
+import type { Metadata, Viewport } from "next"
+import { Inter } from "next/font/google"
 // All packages except `@mantine/hooks` require styles imports
-import "@mantine/core/styles.css";
-import "./global.scss";
+import "@mantine/core/styles.css"
+import "./global.scss"
 
-import ToastProvider from "@/components/ToastProvider/ToastProvider";
-import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
+import ToastProvider from "@/components/ToastProvider/ToastProvider"
+import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core"
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: generalStrings.title,
@@ -16,14 +16,12 @@ export const metadata: Metadata = {
   generator: "Next.js",
   manifest: "/manifest.json",
   keywords: ["nextjs", "next14", "pwa", "next-pwa"],
-  authors: [
-    { name: generalStrings.author.name, url: generalStrings.author.url },
-  ],
+  authors: [{ name: generalStrings.author.name, url: generalStrings.author.url }],
   icons: [
     { rel: "apple-touch-icon", url: "icons/icon-128x128.png" },
     { rel: "icon", url: "icons/icon-128x128.png" },
   ],
-};
+}
 
 export const viewport: Viewport = {
   minimumScale: 1,
@@ -31,7 +29,7 @@ export const viewport: Viewport = {
   width: "device-width",
   themeColor: [{ media: "(prefers-color-scheme: dark)", color: "#fff" }], // Moved here
   viewportFit: "cover",
-};
+}
 
 const theme = createTheme({
   primaryColor: "purple",
@@ -49,15 +47,15 @@ const theme = createTheme({
       "#3a1899",
     ],
   },
-});
+})
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   // Setting the default color scheme to dark
-  const colorScheme = "dark";
+  const colorScheme = "dark"
 
   return (
     <html lang="en" data-mantine-color-scheme={colorScheme}>
@@ -71,5 +69,5 @@ export default function RootLayout({
         </MantineProvider>
       </body>
     </html>
-  );
+  )
 }

@@ -1,34 +1,32 @@
-import axios from "axios";
-import { configurations } from "../configs/config";
-import { IGetShortUrlHashResponse } from "./serverApi.model";
+import axios from "axios"
+import { configurations } from "../configs/config"
+import { IGetShortUrlHashResponse } from "./serverApi.model"
 
-const apiVersion = "v1";
+const apiVersion = "v1"
 const serverApi = axios.create({
   baseURL: `${configurations.envVars.serverBaseUrl}api/${apiVersion}/`,
-});
+})
 
-const urlGroupEndpoint = "url/";
+const urlGroupEndpoint = "url/"
 
 export const isServerAvailable = async () => {
   try {
-    const response = await serverApi.get("/");
-    return response.status === 200 && response.data.status === "ok";
+    const response = await serverApi.get("/")
+    return response.status === 200 && response.data.status === "ok"
   } catch (error) {
-    console.error("Error checking server status:", error);
-    return false;
+    console.error("Error checking server status:", error)
+    return false
   }
-};
+}
 
-export const getShortUrlHash = async (
-  url: string,
-): Promise<IGetShortUrlHashResponse | null> => {
+export const getShortUrlHash = async (url: string): Promise<IGetShortUrlHashResponse | null> => {
   try {
-    const response = await serverApi.post(urlGroupEndpoint, { url });
-    return response.data;
+    const response = await serverApi.post(urlGroupEndpoint, { url })
+    return response.data
   } catch (error) {
-    console.error("Error generating short URL:", error);
-    return null;
+    console.error("Error generating short URL:", error)
+    return null
   }
-};
+}
 
-export default serverApi;
+export default serverApi

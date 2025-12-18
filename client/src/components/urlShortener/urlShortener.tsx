@@ -1,107 +1,78 @@
-"use client";
-import { Button, useMantineTheme } from "@mantine/core";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Id, toast } from "react-toastify";
+"use client"
+import { Button, useMantineTheme } from "@mantine/core"
+import { useEffect, useRef, useState } from "react"
+import { Id, toast } from "react-toastify"
 
-import { getShortUrlHash, isServerAvailable } from "@/api/serverApi";
-import { useShortUrlContext } from "@/hooks/useShortUrlContext";
-import { errorToast, isValidUrl, updateLoadingToast } from "@/utils/utils";
-import TextInputField from "../TextInputField/TextInputField";
-import styles from "./urlShortener.module.scss";
+import { getShortUrlHash, isServerAvailable } from "@/api/serverApi"
+import { useShortUrlContext } from "@/hooks/useShortUrlContext"
+import { errorToast, isValidUrl, updateLoadingToast } from "@/utils/utils"
+import TextInputField from "../TextInputField/TextInputField"
+import styles from "./urlShortener.module.scss"
 
 export const UrlShortener = () => {
-  const [urlInput, setUrlInput] = useState<string>("");
-  const [serverLoadingToastStatus, setServerLoadingToastStatus] = useState<
-    "loading" | "success" | "error"
-  >();
-  const [serverLoadingToastId, setServerLoadingToastId] = useState<Id | null>(
-    null,
-  );
-  const serverLoadingToastStatusRef = useRef(serverLoadingToastStatus);
-  const [isInputReady, setIsInputReady] = useState(false);
-  const { shortUrl, setShortUrl } = useShortUrlContext();
-  const theme = useMantineTheme();
+  const [urlInput, setUrlInput] = useState<string>("")
+  const [serverStatus, setServerStatus] = useState<"loading" | "success" | "error">("loading")
+  const serverLoadingToastIdRef = useRef<Id | null>(null)
+  const [isInputReady, setIsInputReady] = useState(false)
+  const { shortUrl, setShortUrl } = useShortUrlContext()
+  const theme = useMantineTheme()
 
-  const inputErrMsg = urlInput && !isInputReady ? "Invalid URL" : "";
+  const inputErrMsg = urlInput && !isInputReady ? "Invalid URL" : ""
 
   useEffect(() => {
-    const validateUrl = () => setIsInputReady(isValidUrl(urlInput));
-    validateUrl();
-  }, [urlInput]);
+    const validateUrl = () => setIsInputReady(isValidUrl(urlInput))
+    validateUrl()
+  }, [urlInput])
 
   useEffect(() => {
-    serverLoadingToastStatusRef.current = serverLoadingToastStatus;
-  }, [serverLoadingToastStatus]);
+    let isMounted = true
+    const toastId = toast.loading("Connecting to server...")
+    serverLoadingToastIdRef.current = toastId
 
-  const handleServerCheck = useCallback(async () => {
-    if (serverLoadingToastStatus === "loading") {
-      setTimeout(() => {
-        if (
-          serverLoadingToastStatusRef.current !== "loading" ||
-          !serverLoadingToastId
-        )
-          return;
-        toast.update(serverLoadingToastId, {
-          render:
-            "Connecting to server... this may take a while (using free serverless tier)",
-        });
-      }, 4000);
+    const timeoutId = setTimeout(() => {
+      if (isMounted && serverLoadingToastIdRef.current) {
+        toast.update(toastId, {
+          render: "Connecting to server... this may take a while (using free serverless tier)",
+        })
+      }
+    }, 4000)
+
+    isServerAvailable().then((isAvailable) => {
+      if (!isMounted) return
+
+      const status = isAvailable ? "success" : "error"
+      setServerStatus(status)
+
+      toast.update(toastId, {
+        render: isAvailable ? "Connected to server" : "Failed to connect to server",
+        type: status,
+        autoClose: 2000,
+        isLoading: false,
+      })
+    })
+
+    return () => {
+      isMounted = false
+      clearTimeout(timeoutId)
     }
-
-    const isAvailable = await isServerAvailable();
-    setServerLoadingToastStatus(isAvailable ? "success" : "error");
-  }, [serverLoadingToastId, serverLoadingToastStatus]);
-
-  useEffect(() => {
-    if (!serverLoadingToastId) {
-      setServerLoadingToastStatus("loading");
-      setServerLoadingToastId(toast.loading("Connecting to server..."));
-      return;
-    }
-
-    handleServerCheck();
-    if (serverLoadingToastStatus === "loading") return;
-
-    const toastConfig = {
-      autoClose: 2000,
-      isLoading: false,
-    };
-    if (serverLoadingToastStatus === "success") {
-      toast.update(serverLoadingToastId, {
-        render: "Connected to server",
-        type: "success",
-        ...toastConfig,
-      });
-      return;
-    }
-    toast.update(serverLoadingToastId, {
-      render: "Failed to connect to server",
-      type: "error",
-      ...toastConfig,
-    });
-  }, [handleServerCheck, serverLoadingToastId, serverLoadingToastStatus]);
+  }, [])
 
   const handleUrlInputChanged = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setUrlInput(e.target.value);
+    setUrlInput(e.target.value)
 
   const handleGenerateButtonClicked = async () => {
     if (!isValidUrl(urlInput)) {
-      errorToast("Invalid URL");
-      return;
+      errorToast("Invalid URL")
+      return
     }
 
-    setShortUrl("");
-    const shortUrlHashResData = await getShortUrlHash(urlInput);
-    const generatingUrlToastId = toast.loading("Generating short URL...");
+    setShortUrl("")
+    const shortUrlHashResData = await getShortUrlHash(urlInput)
+    const generatingUrlToastId = toast.loading("Generating short URL...")
 
     if (!shortUrlHashResData) {
-      updateLoadingToast(
-        generatingUrlToastId,
-        "Failed to generate short URL",
-        "error",
-        2000,
-      );
-      return;
+      updateLoadingToast(generatingUrlToastId, "Failed to generate short URL", "error", 2000)
+      return
     }
 
     toast.update(generatingUrlToastId, {
@@ -109,11 +80,11 @@ export const UrlShortener = () => {
       type: "success",
       autoClose: 2000,
       isLoading: false,
-    });
+    })
 
-    const { obfuscatedShortenedUrl: shortUrlHash } = shortUrlHashResData;
-    setShortUrl(`${window.location.origin}/s/${shortUrlHash}`);
-  };
+    const { obfuscatedShortenedUrl: shortUrlHash } = shortUrlHashResData
+    setShortUrl(`${window.location.origin}/s/${shortUrlHash}`)
+  }
 
   return (
     <section className={styles.urlShortenerSection}>
@@ -133,7 +104,7 @@ export const UrlShortener = () => {
           <Button
             className={styles.urlButton}
             onClick={handleGenerateButtonClicked}
-            disabled={!isInputReady || serverLoadingToastStatus !== "success"}
+            disabled={!isInputReady || serverStatus !== "success"}
             variant="gradient"
             gradient={{ from: theme.primaryColor, to: theme.colors.blue[4] }}
           >
@@ -142,12 +113,10 @@ export const UrlShortener = () => {
           <Button
             className={styles.clearButton}
             onClick={() => {
-              setUrlInput("");
-              setShortUrl("");
+              setUrlInput("")
+              setShortUrl("")
             }}
-            disabled={
-              (!urlInput && !shortUrl) || serverLoadingToastStatus !== "success"
-            }
+            disabled={(!urlInput && !shortUrl) || serverStatus !== "success"}
             variant="gradient"
             gradient={{ from: theme.colors.red[8], to: theme.colors.red[4] }}
           >
@@ -156,5 +125,5 @@ export const UrlShortener = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}

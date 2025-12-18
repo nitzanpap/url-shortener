@@ -1,8 +1,6 @@
-import { JSX, SVGProps } from "react";
+import { JSX, SVGProps } from "react"
 
-export const Check = (
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>,
-) => {
+export const Check = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
     <svg
       width="16"
@@ -17,5 +15,5 @@ export const Check = (
     >
       <path d="M13.25 4.75L6 12L2.75 8.75" />
     </svg>
-  );
-};
+  )
+}
