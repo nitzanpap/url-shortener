@@ -1,29 +1,29 @@
-"use client"
-import { UrlShortener } from "@/components/urlShortener/urlShortener"
-import { generalStrings } from "@/constants/constants"
-import { ShortUrlContext } from "@/hooks/useShortUrlContext"
-import { ActionIcon } from "@mantine/core"
-import { useEffect, useState } from "react"
-import styles from "./page.module.scss"
-import { ClipboardIcon } from "@/components/icons/ClipboardIcon"
-import { Check } from "@/components/icons/Check"
+"use client";
+import { UrlShortener } from "@/components/urlShortener/urlShortener";
+import { generalStrings } from "@/constants/constants";
+import { ShortUrlContext } from "@/hooks/useShortUrlContext";
+import { ActionIcon } from "@mantine/core";
+import { useEffect, useState } from "react";
+import styles from "./page.module.scss";
+import { ClipboardIcon } from "@/components/icons/ClipboardIcon";
+import { Check } from "@/components/icons/Check";
 
 export default function Home() {
-  const [shortUrl, setShortUrl] = useState<string>("")
-  const [copied, setCopied] = useState(false)
+  const [shortUrl, setShortUrl] = useState<string>("");
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (copied) {
-      navigator.clipboard.writeText(shortUrl)
+      navigator.clipboard.writeText(shortUrl);
     }
     const timeout = setTimeout(() => {
       if (copied) {
-        setCopied(false)
+        setCopied(false);
       }
-    }, 1000)
+    }, 1000);
 
-    return () => clearTimeout(timeout)
-  }, [copied, shortUrl])
+    return () => clearTimeout(timeout);
+  }, [copied, shortUrl]);
   return (
     <section className={styles.pageContainer}>
       <header className={styles.header}></header>
@@ -44,7 +44,7 @@ export default function Home() {
                     className={styles.copyButton}
                     data-copied={copied}
                     onClick={() => {
-                      setCopied(true)
+                      setCopied(true);
                     }}
                   >
                     <ClipboardIcon className={styles.clipboardIcon} />
@@ -58,5 +58,5 @@ export default function Home() {
       </main>
       <footer className={styles.footer}></footer>
     </section>
-  )
+  );
 }

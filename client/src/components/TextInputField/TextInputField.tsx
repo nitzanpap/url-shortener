@@ -1,17 +1,17 @@
-import { TextInput } from "@mantine/core"
-import { FC } from "react"
-import styles from "./TextInputField.module.scss"
+import { TextInput } from "@mantine/core";
+import { FC } from "react";
+import styles from "./TextInputField.module.scss";
 
 interface TextInputFieldProps {
-  type: string
-  name: string
-  id: string
-  className: string
-  placeholder: string
-  required: boolean
-  error: string
-  value: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  type: string;
+  name: string;
+  id: string;
+  className: string;
+  placeholder: string;
+  required: boolean;
+  error: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const TextInputField: FC<TextInputFieldProps> = ({
@@ -38,7 +38,7 @@ const TextInputField: FC<TextInputFieldProps> = ({
       onChange={onChange}
       width={"100%"}
     />
-  )
-}
+  );
+};
 
-export default TextInputField
+export default TextInputField;

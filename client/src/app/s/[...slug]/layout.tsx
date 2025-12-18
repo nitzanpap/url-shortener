@@ -1,7 +1,7 @@
 export default function ShortUrlPageLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
-  return <>{children}</>
+  return <>{children}</>;
 }

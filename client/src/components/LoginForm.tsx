@@ -1,23 +1,23 @@
-import { useState } from 'react'
-import { useAuth } from '@/hooks/useAuth'
-import { useRouter } from 'next/navigation'
-import styles from './LoginForm.module.scss'
+import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import styles from "./LoginForm.module.scss";
 
 export function LoginForm() {
-  const router = useRouter()
-  const { login, isLoading, error } = useAuth()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const router = useRouter();
+  const { login, isLoading, error } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      await login({ email, password })
-      router.push('/') // Redirect to home page after successful login
+      await login({ email, password });
+      router.push("/"); // Redirect to home page after successful login
     } catch (err) {
       // Error is already handled by useAuth
     }
-  }
+  };
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
@@ -45,8 +45,8 @@ export function LoginForm() {
         />
       </div>
       <button type="submit" disabled={isLoading}>
-        {isLoading ? 'Logging in...' : 'Login'}
+        {isLoading ? "Logging in..." : "Login"}
       </button>
     </form>
-  )
-} 
+  );
+}
