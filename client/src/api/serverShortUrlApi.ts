@@ -1,6 +1,6 @@
 import axios from "axios"
 import { configurations } from "../configs/config"
-import { IGetOriginalUrlResponse } from "./serverApi.model"
+import type { IGetOriginalUrlResponse } from "./serverApi.model"
 
 const serverApi = axios.create({
   baseURL: `${configurations.envVars.serverBaseUrl}`,

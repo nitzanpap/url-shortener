@@ -1,5 +1,5 @@
 import { TextInput } from "@mantine/core"
-import { FC } from "react"
+import type { FC } from "react"
 import styles from "./TextInputField.module.scss"
 
 interface TextInputFieldProps {

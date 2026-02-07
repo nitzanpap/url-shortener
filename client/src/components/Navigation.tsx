@@ -1,5 +1,5 @@
-import Link from "next/link"
 import { useAuth } from "@/hooks/useAuth"
+import Link from "next/link"
 import styles from "./Navigation.module.scss"
 
 export function Navigation() {
@@ -10,7 +10,7 @@ export function Navigation() {
       {/* ... existing navigation items ... */}
 
       {isAuthenticated ? (
-        <button onClick={logout} className={styles.authButton}>
+        <button type="button" onClick={logout} className={styles.authButton}>
           Logout
         </button>
       ) : (

@@ -1,4 +1,4 @@
-import { JSX, SVGProps } from "react"
+import type { JSX, SVGProps } from "react"
 
 export const Check = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
@@ -11,6 +11,7 @@ export const Check = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) 
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
+      aria-hidden="true"
       {...props}
     >
       <path d="M13.25 4.75L6 12L2.75 8.75" />

@@ -1,6 +1,6 @@
-import { useState, useCallback } from "react"
-import { authApi, Credentials } from "@/api/auth"
+import { type Credentials, authApi } from "@/api/auth"
 import { auth } from "@/utils/auth"
+import { useCallback, useState } from "react"
 
 export function useAuth() {
   const [isLoading, setIsLoading] = useState(false)

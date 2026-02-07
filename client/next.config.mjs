@@ -1,5 +1,5 @@
 // Purpose: Next.js configuration file.
-import path from "path"
+import path from "node:path"
 import withPWA from "next-pwa"
 
 /** @type {import('next').NextConfig} */

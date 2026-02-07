@@ -1,7 +1,7 @@
 "use client"
 import { Button, useMantineTheme } from "@mantine/core"
 import { useEffect, useRef, useState } from "react"
-import { Id, toast } from "react-toastify"
+import { type Id, toast } from "react-toastify"
 
 import { getShortUrlHash, isServerAvailable } from "@/api/serverApi"
 import { useShortUrlContext } from "@/hooks/useShortUrlContext"

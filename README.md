@@ -36,8 +36,7 @@ For the server:
 
 For the client:
 
-- Node.js: [Download and install Node.js](https://nodejs.org/en/download/)
-- npm: [Download and install npm](https://www.npmjs.com/get-npm)
+- Bun: [Download and install Bun](https://bun.sh/docs/installation)
 
 ### Installing
 
@@ -58,15 +57,15 @@ A step by step series of examples that tell you how to get a development env run
 3. Install root dependencies:
 
     ```bash
-    npm install
+    bun install
     ```
 
 ### Running Both Server and Client Together
 
-The easiest way to run both the server and client simultaneously is using the root-level npm script:
+The easiest way to run both the server and client simultaneously is using the root-level script:
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 This uses `concurrently` to run both the server (with live reload) and the client development server in a single terminal with labeled output.
@@ -132,7 +131,7 @@ Alternatively, you can run the server and client separately in different termina
 3. Install the dependencies:
 
     ```bash
-    npm install
+    bun install
     ```
 
 4. Run the development server:
@@ -140,13 +139,13 @@ Alternatively, you can run the server and client separately in different termina
     - For development:
 
         ```bash
-        npm run dev
+        bun run dev
         ```
 
     - For production:
 
         ```bash
-        npm run build && npm start
+        bun run build && bun start
         ```
 
 ## Debugging

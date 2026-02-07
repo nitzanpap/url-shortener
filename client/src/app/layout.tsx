@@ -6,7 +6,7 @@ import "@mantine/core/styles.css"
 import "./global.scss"
 
 import ToastProvider from "@/components/ToastProvider/ToastProvider"
-import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core"
+import { ColorSchemeScript, MantineProvider, createTheme } from "@mantine/core"
 
 const inter = Inter({ subsets: ["latin"] })
 

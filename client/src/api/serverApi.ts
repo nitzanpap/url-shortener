@@ -1,6 +1,6 @@
 import axios from "axios"
 import { configurations } from "../configs/config"
-import { IGetShortUrlHashResponse } from "./serverApi.model"
+import type { IGetShortUrlHashResponse } from "./serverApi.model"
 
 const apiVersion = "v1"
 const serverApi = axios.create({

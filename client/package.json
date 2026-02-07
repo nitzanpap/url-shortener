@@ -10,8 +10,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "format": "prettier --write .",
-    "lint": "eslint ."
+    "format": "biome format --write .",
+    "lint": "biome lint .",
+    "check": "biome check ."
   },
   "dependencies": {
     "@mantine/core": "^7.17.8",
@@ -26,17 +27,17 @@
     "react-toastify": "^10.0.5",
     "sass": "^1.97.1"
   },
+  "overrides": {
+    "@types/minimatch": "5.1.2"
+  },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.3",
+    "@biomejs/biome": "^1.9.4",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^9",
-    "eslint-config-next": "^16.0.10",
     "postcss": "^8.4.38",
     "postcss-preset-mantine": "^1.15.0",
     "postcss-simple-vars": "^7.0.1",
-    "prettier": "^3.7.4",
     "typescript": "^5"
   }
 }

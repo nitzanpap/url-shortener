@@ -1,4 +1,4 @@
-import { JSX, SVGProps } from "react"
+import type { JSX, SVGProps } from "react"
 
 export const ClipboardIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
@@ -11,6 +11,7 @@ export const ClipboardIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGEl
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
+      aria-hidden="true"
       {...props}
     >
       <path d="M5.75 4.75H10.25V1.75H5.75V4.75Z" />
