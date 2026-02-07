@@ -2,13 +2,13 @@ package dbconfigs
 
 type DatabaseConfig struct {
 	ConnectionType DBConnectionType
-	DirectURL      string
+	DirectURL      string `json:"-"`
 	Host           string
 	Port           int
 	Username       string
-	Password       string
+	Password       string `json:"-"`
 	Name           string
-	DBURL          string
+	DBURL          string `json:"-"`
 }
 
 type DBConnectionType string
