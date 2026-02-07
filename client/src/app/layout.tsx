@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description: generalStrings.description,
   generator: "Next.js",
   manifest: "/manifest.json",
-  keywords: ["nextjs", "next14", "pwa", "next-pwa"],
+  keywords: ["nextjs", "next15", "url-shortener"],
   authors: [{ name: generalStrings.author.name, url: generalStrings.author.url }],
   icons: [
     { rel: "apple-touch-icon", url: "icons/icon-128x128.png" },
