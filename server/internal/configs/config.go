@@ -29,6 +29,7 @@ func LoadConfig() *Config {
 		Database:     dbconfigs.GetDatabaseConfig(),
 		Environment:  getEnvironment(),
 		ClientOrigin: os.Getenv("CLIENT_ORIGIN"),
+		JWTSecret:    os.Getenv("JWT_SECRET"),
 	}
 
 	// if config.Environment is not one of the predefined values, throw an error
@@ -43,6 +44,10 @@ func LoadConfig() *Config {
 
 	if isInvalidConfig {
 		log.Fatalf(colors.Error("Error loading configuration - Missing values in: %s\n"), strings.Join(errStringArr, ", "))
+	}
+
+	if len(config.JWTSecret) < 32 {
+		log.Fatalf(colors.Error("JWT_SECRET must be at least 32 characters long\n"))
 	}
 
 	return config

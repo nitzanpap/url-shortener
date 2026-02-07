@@ -7,6 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
 
+	"github.com/nitzanpap/url-shortener/server/internal/configs"
+	"github.com/nitzanpap/url-shortener/server/internal/middleware"
 	"github.com/nitzanpap/url-shortener/server/internal/routes/auth"
 	"github.com/nitzanpap/url-shortener/server/internal/routes/urls"
 	"github.com/nitzanpap/url-shortener/server/internal/routes/users"
@@ -16,25 +18,30 @@ import (
 type Router struct {
 	db             *pgx.Conn
 	jwtSecret      string
+	environment    configs.Environment
 	urlHandler     urls.Handler
 	authHandler    auth.Handler
 	authMiddleware *auth.AuthMiddleware
 }
 
-func NewRouter(db *pgx.Conn, jwtSecret string) *Router {
+func NewRouter(db *pgx.Conn, jwtSecret string, environment configs.Environment) *Router {
 	userRepo := users.NewUserRepository(db)
 	authService := auth.NewService(userRepo, jwtSecret, 24*time.Hour)
 
 	return &Router{
 		db:             db,
 		jwtSecret:      jwtSecret,
+		environment:    environment,
 		urlHandler:     urls.NewHandler(urls.NewService(urls.NewRepository(db))),
-		authHandler:    auth.NewHandler(authService),
+		authHandler:    auth.NewHandler(authService, environment),
 		authMiddleware: auth.NewAuthMiddleware(authService),
 	}
 }
 
-func InitializeRoutes(r *gin.Engine, db *pgx.Conn) {
+func InitializeRoutes(r *gin.Engine, db *pgx.Conn, config *configs.Config) {
+	authRateLimiter := middleware.NewRateLimiter(10, 5)
+	urlRateLimiter := middleware.NewRateLimiter(30, 10)
+
 	r.GET("/", func(c *gin.Context) {
 		utils.OkHandler(c, nil)
 	})
@@ -52,8 +59,6 @@ func InitializeRoutes(r *gin.Engine, db *pgx.Conn) {
 		v1 := api.Group("/v1")
 		{
 			v1.GET("/", func(c *gin.Context) {
-				// This route should instead display the API documentation.
-				// For now, it will redirect to the health check route.
 				c.Redirect(http.StatusMovedPermanently, "/api/v1/health")
 			})
 
@@ -67,26 +72,28 @@ func InitializeRoutes(r *gin.Engine, db *pgx.Conn) {
 				c.JSON(http.StatusOK, gin.H{"status": "ok", "db": "ok"})
 			})
 
-			urls.URLGroupHandler(v1, db)
+			rateLimitedV1 := v1.Group("/")
+			rateLimitedV1.Use(urlRateLimiter.Middleware())
+			urls.URLGroupHandler(rateLimitedV1, db)
 		}
 	}
 
-	authRouter := NewRouter(db, "your_jwt_secret")
-	authHandler := authRouter.Setup()
+	authRouter := NewRouter(db, config.JWTSecret, config.Environment)
+	authHandler := authRouter.Setup(authRateLimiter)
 	r.Any("/auth/*path", func(c *gin.Context) {
 		authHandler.ServeHTTP(c.Writer, c.Request)
 	})
 }
 
-func (r *Router) Setup() http.Handler {
+func (r *Router) Setup(rateLimiter *middleware.RateLimiter) http.Handler {
 	router := gin.New()
 
-	// Add your auth routes here
-	auth := router.Group("/")
+	authGroup := router.Group("/")
+	authGroup.Use(rateLimiter.Middleware())
 	{
-		auth.POST("/login", r.authHandler.Login)
-		auth.POST("/register", r.authHandler.Register)
-		// Add other auth routes as needed
+		authGroup.POST("/login", r.authHandler.Login)
+		authGroup.POST("/register", r.authHandler.Register)
+		authGroup.POST("/logout", r.authHandler.Logout)
 	}
 
 	return router

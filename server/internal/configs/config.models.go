@@ -7,6 +7,7 @@ type Config struct {
 	Database     dbconfigs.DatabaseConfig
 	Environment  Environment
 	ClientOrigin string
+	JWTSecret    string `json:"-"`
 }
 type Environment string
 

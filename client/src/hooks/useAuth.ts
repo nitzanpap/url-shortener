@@ -33,7 +33,12 @@ export function useAuth() {
     }
   }, [])
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    try {
+      await authApi.logout()
+    } catch {
+      // Clear local state even if server call fails
+    }
     auth.removeToken()
   }, [])
 

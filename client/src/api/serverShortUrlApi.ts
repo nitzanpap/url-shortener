@@ -4,6 +4,7 @@ import type { IGetOriginalUrlResponse } from "./serverApi.model"
 
 const serverApi = axios.create({
   baseURL: `${configurations.envVars.serverBaseUrl}`,
+  withCredentials: true,
 })
 
 const shortUrlEndpoint = "s/"

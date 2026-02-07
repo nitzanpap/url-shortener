@@ -15,6 +15,10 @@ export const auth = {
   },
 
   isAuthenticated(): boolean {
-    return !!this.getToken()
+    // Check localStorage token (fallback for local dev where cookies may not work cross-origin)
+    if (this.getToken()) return true
+    // In production, the httpOnly cookie handles auth — we can't check it from JS,
+    // so authenticated state is confirmed by API calls succeeding
+    return false
   },
 }

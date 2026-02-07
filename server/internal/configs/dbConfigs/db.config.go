@@ -78,7 +78,6 @@ func ConnectToDBPool(dbURL string) (*pgxpool.Pool, error) {
 
 func InitDB(db *pgx.Conn) {
 	createDBTables(db)
-	enableRLS(db)
 	createPreparedStatements(db)
 }
 
@@ -87,12 +86,12 @@ func createDBTables(db *pgx.Conn) {
 	_, err := db.Exec(
 		context.Background(),
 		`CREATE TABLE IF NOT EXISTS users (
-		user_id SERIAL PRIMARY KEY,
-		username TEXT NOT NULL,
-		hashed_password TEXT NOT NULL,
+		id SERIAL PRIMARY KEY,
+		email TEXT NOT NULL,
+		password TEXT NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		UNIQUE (username)
+		UNIQUE (email)
 		);`)
 	if err != nil {
 		log.Fatalf(colors.Error("Unable to create users table: %v\n"), err)
@@ -107,7 +106,7 @@ func createDBTables(db *pgx.Conn) {
         original_url TEXT NOT NULL,
         obfuscated_shortened_url TEXT NOT NULL,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		FOREIGN KEY (user_id) REFERENCES users(user_id),
+		FOREIGN KEY (user_id) REFERENCES users(id),
         UNIQUE (original_url),
         UNIQUE (obfuscated_shortened_url)
     );
@@ -117,23 +116,7 @@ func createDBTables(db *pgx.Conn) {
 	}
 }
 
-func enableRLS(db *pgx.Conn) {
-	// Enable RLS on the Users table
-	_, err := db.Exec(context.Background(), "ALTER TABLE users ENABLE ROW LEVEL SECURITY;")
-	if err != nil {
-		log.Fatalf(colors.Error("Unable to enable RLS on users table: %v\n"), err)
-	}
-
-	// Enable RLS on the URLs table
-	_, err = db.Exec(context.Background(), "ALTER TABLE urls ENABLE ROW LEVEL SECURITY;")
-	if err != nil {
-		log.Fatalf(colors.Error("Unable to enable RLS on urls table: %v\n"), err)
-	}
-}
-
 var PreparedStatements = preparedStatementsStruct{
-	CreateUserRow:   "createUserRow",
-	GetUserRow:      "getUserRow",
 	CreateURLRow:    "createUrlRow",
 	GetURLRow:       "getUrlRow",
 	GetURLsByUserID: "getUrlsByUserId",
@@ -141,8 +124,6 @@ var PreparedStatements = preparedStatementsStruct{
 
 func createPreparedStatements(db *pgx.Conn) {
 	preparedStatements := map[string]string{
-		PreparedStatements.CreateUserRow:   `INSERT INTO users (username, hashed_password) VALUES ($1, $2)`,
-		PreparedStatements.GetUserRow:      `SELECT user_id, username, hashed_password FROM users WHERE username = $1`,
 		PreparedStatements.CreateURLRow:    `INSERT INTO urls (original_url, obfuscated_shortened_url, user_id) VALUES ($1, $2, $3)`,
 		PreparedStatements.GetURLRow:       `SELECT id, user_id, original_url, obfuscated_shortened_url FROM urls WHERE obfuscated_shortened_url = $1`,
 		PreparedStatements.GetURLsByUserID: `SELECT id, user_id, original_url, obfuscated_shortened_url FROM urls WHERE user_id = $1`,

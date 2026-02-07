@@ -31,12 +31,27 @@ func SetupGinServer(config *configs.Config) *gin.Engine {
 	// Add CORS middleware with sanitized client origin
 	router.Use(setupCORSMiddleware(sanitizeOrigin(config.ClientOrigin)))
 
+	// Add security headers
+	router.Use(securityHeadersMiddleware())
+
 	return router
 }
 
 // sanitizeOrigin ensures the origin doesn't have a trailing slash
 func sanitizeOrigin(origin string) string {
 	return strings.TrimSuffix(origin, "/")
+}
+
+func securityHeadersMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
+		c.Writer.Header().Set("X-Frame-Options", "DENY")
+		c.Writer.Header().Set("X-XSS-Protection", "0")
+		c.Writer.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
+		c.Writer.Header().Set("Content-Security-Policy", "default-src 'self'")
+		c.Writer.Header().Set("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+		c.Next()
+	}
 }
 
 // setupCORSMiddleware creates middleware for handling CORS

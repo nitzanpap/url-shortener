@@ -19,5 +19,5 @@ const (
 )
 
 type preparedStatementsStruct struct {
-	CreateUserRow, GetUserRow, CreateURLRow, GetURLRow, GetURLsByUserID string
+	CreateURLRow, GetURLRow, GetURLsByUserID string
 }

@@ -5,6 +5,7 @@ import type { IGetShortUrlHashResponse } from "./serverApi.model"
 const apiVersion = "v1"
 const serverApi = axios.create({
   baseURL: `${configurations.envVars.serverBaseUrl}api/${apiVersion}/`,
+  withCredentials: true,
 })
 
 const urlGroupEndpoint = "url/"

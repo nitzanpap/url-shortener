@@ -38,7 +38,7 @@ func URLGroupHandler(r *gin.RouterGroup, db *pgx.Conn) {
 				URL string `json:"url"`
 			}
 			if err := c.ShouldBindJSON(&request); err != nil {
-				log.Fatalf(colors.Error("Failed to bind JSON: %s"), err)
+				log.Printf(colors.Error("Failed to bind JSON: %s"), err)
 				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 				return
 			}
@@ -48,7 +48,7 @@ func URLGroupHandler(r *gin.RouterGroup, db *pgx.Conn) {
 			}
 			obfuscatedShortenedURL, err := saveURL(request.URL, db)
 			if err != nil {
-				log.Fatalf(colors.Error("Failed to save URL: %s"), err)
+				log.Printf(colors.Error("Failed to save URL: %s"), err)
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate short URL"})
 				return
 			}

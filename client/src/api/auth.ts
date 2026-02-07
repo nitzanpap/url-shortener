@@ -16,6 +16,7 @@ export const authApi = {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(credentials),
     })
 
@@ -31,6 +32,7 @@ export const authApi = {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(credentials),
     })
 
@@ -40,5 +42,12 @@ export const authApi = {
     }
 
     return response.json()
+  },
+
+  async logout(): Promise<void> {
+    await fetch(`${API_BASE_URL}/auth/logout`, {
+      method: "POST",
+      credentials: "include",
+    })
   },
 }
