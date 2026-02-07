@@ -18,10 +18,9 @@ import (
 func LoadConfig() *Config {
 	// Load configuration from file or any other source
 
-	// Find .env file
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file: %s", err)
+	// Load .env file if present (optional in production where env vars are set by the platform)
+	if err := godotenv.Load(".env"); err != nil {
+		log.Printf("No .env file found, using environment variables: %s", err)
 	}
 
 	config := &Config{
