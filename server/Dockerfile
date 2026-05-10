@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM golang:1.26rc2
+FROM golang:1.25.10
 
 LABEL name="url-shortener-image"
 
